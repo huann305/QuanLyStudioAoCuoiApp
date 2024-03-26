@@ -2,8 +2,9 @@ import { Alert, StyleSheet, Text, View } from 'react-native'
 import React, { useState } from 'react'
 import TextInputCustom from '../components/TextInputCustom'
 import ButtonCustom from '../components/ButtonCustom'
+import BASE_URL from '../base/BASE_URL'
 
-const URL_REGISTER = 'http://10.0.2.2:3000/api/employees'
+const URL_REGISTER = `${BASE_URL}/employees`
 
 const RegisterScreen = ({ navigation }) => {
     const [username, setusername] = useState("")

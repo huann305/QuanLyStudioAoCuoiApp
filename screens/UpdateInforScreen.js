@@ -1,7 +1,7 @@
 import { Alert, Image, StyleSheet, Text, View } from 'react-native'
 import React, { useContext, useState } from 'react'
 
-import DataContext from './DataContext';
+import DataContext from './Context/DataContext';
 import TextInputCus from '../components/TextInputCustom';
 import ButtonCustom from '../components/ButtonCustom';
 

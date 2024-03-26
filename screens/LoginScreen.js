@@ -2,8 +2,9 @@ import { Alert, StyleSheet, Text, View } from 'react-native'
 import React, { useState } from 'react'
 import TextInputCustom from '../components/TextInputCustom'
 import ButtonCustom from '../components/ButtonCustom'
+import BASE_URL from '../base/BASE_URL'
 
-const URL_LOGIN = 'http://10.0.2.2:3000/api/login'
+const URL_LOGIN = `${BASE_URL}/login`
 
 const login = (username, password, navigation) => {
   fetch(URL_LOGIN, {
