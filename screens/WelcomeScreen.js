@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { Image, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 
 const WelcomeScreen = ({navigation}) => {
@@ -7,7 +7,7 @@ const WelcomeScreen = ({navigation}) => {
     }, 500);
   return (
     <View>
-      <Text>WelcomeScreen</Text>
+      <Image source={require('../img/welcome.png')} style={{height: '100%', width: '100%'}}/>
     </View>
   )
 }

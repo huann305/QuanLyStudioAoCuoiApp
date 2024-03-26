@@ -2,13 +2,16 @@ import {Alert, StyleSheet, Text, View} from 'react-native';
 import React, {useState} from 'react';
 import TextInputCustom from '../components/TextInputCustom';
 import ButtonCustom from '../components/ButtonCustom';
+import BASE_URL from '../base/BASE_URL';
 
-const URL_REGISTER = 'http://192.168.0.102:3000/api/employees';
+const URL_REGISTER = `${BASE_URL}/employees`;
 
 const RegisterScreen = ({navigation}) => {
   const [username, setusername] = useState('');
   const [password, setpassword] = useState('');
   const [repassword, setrepassword] = useState('');
+  const [email, setemail] = useState('');
+  const [phoneNumber, setphoneNumber] = useState('');
   return (
     <View
       style={{
@@ -24,7 +27,23 @@ const RegisterScreen = ({navigation}) => {
         }}
         onChangeText={setusername}
         lable={'Username'}
-        placeholder="abc@gmail.com"
+        placeholder="username"
+      />
+      <TextInputCustom
+        style={{
+          width: '100%',
+        }}
+        onChangeText={setemail}
+        lable={'Email'}
+        placeholder="bahuan@gmail.com"
+      />
+      <TextInputCustom
+        style={{
+          width: '100%',
+        }}
+        onChangeText={setphoneNumber}
+        lable={'Phone Number'}
+        placeholder="0987654321"
       />
       <TextInputCustom
         style={{
@@ -62,10 +81,9 @@ const RegisterScreen = ({navigation}) => {
             body: JSON.stringify({
               username: username,
               password: password,
-              fullName: '',
-              email: '',
-              phoneNumber: '',
-              address: '',
+              email: email,
+              phoneNumber: phoneNumber,
+              role: 'employee',
             }),
           })
             .then(res => {
@@ -76,7 +94,7 @@ const RegisterScreen = ({navigation}) => {
               if (json) {
                 navigation.replace('Login', json);
               } else {
-                Alert.alert('Error', 'Account already exist');
+                Alert.alert('Error', 'Check your information and try again');
               }
             })
             .catch(err => console.log(err));

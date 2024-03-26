@@ -9,10 +9,12 @@ import {
   View,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
+import BASE_URL from '../base/BASE_URL';
 
 //url
-const url = 'http://192.168.0.102:3000/api/employees';
-const EmployeeManagementScreen = ({navigation}) => {
+
+const url = `${BASE_URL}/employees`;
+const EmployeeManagementScreen = () => {
   const [data, setData] = useState([]);
   //dùng index để sau này thi index thay đổi thì sẽ load lại dữ liệu trên flastlist
   const [index, setindex] = useState(0);
@@ -52,7 +54,6 @@ const EmployeeManagementScreen = ({navigation}) => {
           <Text style={{color: 'black', fontWeight: '500', fontSize: 18}}>
             {item.fullName}
           </Text>
-          {/* <Text>Email: {item.email}</Text> */}
           <Text>Chức vụ: {item.role}</Text>
         </View>
         <Image source={require('../img/chevron.png')} />
