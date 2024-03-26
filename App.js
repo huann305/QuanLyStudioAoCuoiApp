@@ -59,7 +59,7 @@ function MyDrawer({ route }) {
   return (
     <DataContext.Provider value={route.params}>
       <Drawer.Navigator
-      initialRouteName='UpdateInforScreen'
+      initialRouteName='ServiceManagementScreen'
         screenOptions={{ headerStyle: { backgroundColor: 'transparent', elevation: 0, shadowOpacity: 0 }, drawerLabelStyle: { color: '#686868' } }}
         drawerContent={props => <CustomDrawer {...props} />}>
         <Drawer.Screen name="ServiceManagementScreen" options={{ title: 'Quản lý dịch vụ' }} component={ServiceManagementScreen} />
@@ -80,7 +80,7 @@ function MyDrawer({ route }) {
 const App = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName='Login' screenOptions={{ headerShown: false }}>
+      <Stack.Navigator initialRouteName='WelcomeScreen' screenOptions={{ headerShown: false }}>
         <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} />
         <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
         <Stack.Screen name="Login" component={LoginScreen} />
