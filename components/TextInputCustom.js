@@ -3,8 +3,8 @@ import React from 'react'
 
 const TextInputCus = (props) => {
   return (
-    <View style={props.layoutStyle}>
-      <Text style={{ fontSize: 18, color: "#4D4D4D" }}>{props.lable}</Text>
+    <View style={[props.layoutStyle, props.style]}>
+      <Text style={{ fontSize: 16, color: "#4D4D4D" }}>{props.lable}</Text>
       <TextInput
         {...props}
         placeholderTextColor={props.placeholderTextColor}
