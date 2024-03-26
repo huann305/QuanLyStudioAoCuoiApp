@@ -12,7 +12,7 @@ import React, {useEffect, useState} from 'react';
 
 //url
 const url = 'http://192.168.0.102:3000/api/employees';
-const EmployeeManagementScreen = () => {
+const EmployeeManagementScreen = ({navigation}) => {
   const [data, setData] = useState([]);
   //dùng index để sau này thi index thay đổi thì sẽ load lại dữ liệu trên flastlist
   const [index, setindex] = useState(0);
@@ -38,7 +38,9 @@ const EmployeeManagementScreen = () => {
   //item
   const ItemEmployee = ({item}) => {
     return (
-      <View style={styles.itemE}>
+      <TouchableOpacity
+        style={styles.itemE}
+        onPress={navigation.navigate('DetailEmployeeScreen')}>
         <Image
           source={{
             uri: item.image,
@@ -50,50 +52,45 @@ const EmployeeManagementScreen = () => {
           <Text style={{color: 'black', fontWeight: '500', fontSize: 18}}>
             {item.fullName}
           </Text>
-          <Text>Email: {item.email}</Text>
-          <Text>Đchi: {item.adress}</Text>
-          <Text>SĐT: {item.phoneNumber}</Text>
+          {/* <Text>Email: {item.email}</Text> */}
           <Text>Chức vụ: {item.role}</Text>
         </View>
-        <Image source={require('../images/chevron.png')} />
-      </View>
+        <Image source={require('../img/chevron.png')} />
+      </TouchableOpacity>
     );
   };
   return (
     <View style={styles.ctn}>
       <View style={styles.v1}>
-        <TouchableOpacity onPress={() => navigation.navigate('Home')}>
-          <Image source={require('../images/arrowleft.png')} />
+        <TouchableOpacity
+          onPress={() => navigation.navigate('ServiceManagementScreen')}>
+          <Image source={require('../img/arrowleft.png')} />
         </TouchableOpacity>
         <Text style={styles.title}>Quản lý nhân viên</Text>
-        <View></View>
+        <Text></Text>
       </View>
       <TouchableOpacity onPress={() => {}}>
         <Image
-          source={require('../images/filter.png')}
+          source={require('../img/filter.png')}
           style={{alignSelf: 'flex-end', marginVertical: 10}}
         />
       </TouchableOpacity>
       <View style={styles.search}>
         <Image
-          source={require('../images/search-interface-symbol.png')}
+          source={require('../img/search-interface-symbol.png')}
           style={{width: 24, height: 24}}
         />
         <TextInput placeholder="Search" />
       </View>
 
-      <ScrollView>
-        <FlatList
-          scrollEnabled={false}
-          nestedScrollEnabled={false}
-          data={data}
-          keyExtractor={item => item._id}
-          extraData={index}
-          renderItem={({item}) => {
-            return <ItemEmployee item={item} />;
-          }}
-        />
-      </ScrollView>
+      <FlatList
+        data={data}
+        keyExtractor={item => item._id}
+        extraData={index}
+        renderItem={({item}) => {
+          return <ItemEmployee item={item} />;
+        }}
+      />
     </View>
   );
 };
@@ -102,7 +99,7 @@ export default EmployeeManagementScreen;
 
 const styles = StyleSheet.create({
   ctn: {
-    marginHorizontal: 10,
+    marginHorizontal: 15,
   },
   search: {
     backgroundColor: '#EEEDEB',
@@ -114,27 +111,24 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   v1: {
-    marginVertical: 10,
-    marginTop: 20,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginHorizontal: 20,
+    marginTop: 20,
   },
   title: {
     color: 'black',
     fontWeight: '500',
     alignSelf: 'center',
     fontSize: 20,
-    flex: 1,
   },
   itemE: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     borderRadius: 15,
-    paddingHorizontal: 10,
-    paddingVertical: 10,
+    paddingHorizontal: 15,
+    paddingVertical: 15,
     backgroundColor: '#EEEDEB',
     marginVertical: 5,
   },
