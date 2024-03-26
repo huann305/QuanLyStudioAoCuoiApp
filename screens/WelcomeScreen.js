@@ -4,7 +4,7 @@ import React from 'react'
 const WelcomeScreen = ({navigation}) => {
     setTimeout(() => {
         navigation.replace('Login')
-    }, 3000);
+    }, 500);
   return (
     <View>
       <Text>WelcomeScreen</Text>

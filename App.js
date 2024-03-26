@@ -1,5 +1,5 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
 import { NavigationContainer } from '@react-navigation/native'
 import 'react-native-gesture-handler';
@@ -18,12 +18,13 @@ import SalesByService from './screens/SalesByService';
 import MostServiceScreen from './screens/MostServiceScreen';
 import UpdateInforScreen from './screens/UpdateInforScreen';
 import ChangePasswordScreen from './screens/ChangePasswordScreen';
-
+import DataContext from './screens/DataContext';
+import RegisterScreen from './screens/RegisterScreen';
 const Drawer = createDrawerNavigator();
 
 const CustomDrawer = (props) => {
   return (
-    <View style={{flex: 1}}>
+    <View style={{ flex: 1 }}>
       <DrawerContentScrollView {...props}>
         <View style={{
           height: 150,
@@ -44,38 +45,44 @@ const CustomDrawer = (props) => {
         </View>
         <DrawerItemList {...props} />
       </DrawerContentScrollView>
-        <TouchableOpacity 
+      <TouchableOpacity
         onPress={() => props.navigation.replace('WelcomeScreen')}
         style={{ position: 'absolute', bottom: 20 }}>
-          <Text style={{ color: '#686868', marginStart: 18, fontWeight: '500' }}>Đăng xuất</Text>
-        </TouchableOpacity>
+        <Text style={{ color: '#686868', marginStart: 18, fontWeight: '500' }}>Đăng xuất</Text>
+      </TouchableOpacity>
     </View>
   )
 }
 
-function MyDrawer() {
+function MyDrawer({ route }) {
+  // console.log(route)
   return (
-    <Drawer.Navigator
-      screenOptions={{ headerStyle: { backgroundColor: 'transparent', elevation: 0, shadowOpacity: 0 }, drawerLabelStyle: { color: '#686868' } }}
-      drawerContent={props => <CustomDrawer {...props} />}>
-      <Drawer.Screen name="ServiceManagementScreen" options={{ title: 'Quản lý dịch vụ' }} component={ServiceManagementScreen} />
-      <Drawer.Screen name="EmployeeManagementScreen" options={{ title: 'Quản lý nhân viên' }} component={EmployeeManagementScreen} />
-      <Drawer.Screen name="TaskManagementScreen" options={{ title: 'Quản lý công việc' }} component={TaskManagementScreen} />
-      <Drawer.Screen name="BillManagementScreen" options={{ title: 'Tạo hóa đơn' }} component={BillManagementScreen} />
-      <Drawer.Screen name="TotalSalesScreen" options={{ title: 'Tổng doanh số' }} component={TotalSalesScreen} />
-      <Drawer.Screen name="SalesByService" options={{ title: 'Doanh số theo dịch vụ' }} component={SalesByService} />
-      <Drawer.Screen name="MostServiceScreen" options={{ title: 'Dịch vụ được thuê nhiều nhất' }} component={MostServiceScreen} />
-      <Drawer.Screen name="UpdateInforScreen" options={{ title: 'Cập nhật thông tin' }} component={UpdateInforScreen} />
-      <Drawer.Screen name="ChangePasswordScreen" options={{ title: 'Đổi mật khẩu' }} component={ChangePasswordScreen} />
-    </Drawer.Navigator>
+    <DataContext.Provider value={route.params}>
+      <Drawer.Navigator
+      initialRouteName='UpdateInforScreen'
+        screenOptions={{ headerStyle: { backgroundColor: 'transparent', elevation: 0, shadowOpacity: 0 }, drawerLabelStyle: { color: '#686868' } }}
+        drawerContent={props => <CustomDrawer {...props} />}>
+        <Drawer.Screen name="ServiceManagementScreen" options={{ title: 'Quản lý dịch vụ' }} component={ServiceManagementScreen} />
+        <Drawer.Screen name="EmployeeManagementScreen" options={{ title: 'Quản lý nhân viên' }} component={EmployeeManagementScreen} />
+        <Drawer.Screen name="TaskManagementScreen" options={{ title: 'Quản lý công việc' }} component={TaskManagementScreen} />
+        <Drawer.Screen name="BillManagementScreen" options={{ title: 'Tạo hóa đơn' }} component={BillManagementScreen} />
+        <Drawer.Screen name="TotalSalesScreen" options={{ title: 'Tổng doanh số' }} component={TotalSalesScreen} />
+        <Drawer.Screen name="SalesByService" options={{ title: 'Doanh số theo dịch vụ' }} component={SalesByService} />
+        <Drawer.Screen name="MostServiceScreen" options={{ title: 'Dịch vụ được thuê nhiều nhất' }} component={MostServiceScreen} />
+        <Drawer.Screen
+          name="UpdateInforScreen" options={{ title: 'Cập nhật thông tin' }} component={UpdateInforScreen} />
+        <Drawer.Screen name="ChangePasswordScreen" options={{ title: 'Đổi mật khẩu' }} component={ChangePasswordScreen} />
+      </Drawer.Navigator>
+    </DataContext.Provider>
   );
 }
 
 const App = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Navigator initialRouteName='Login' screenOptions={{ headerShown: false }}>
         <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} />
+        <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Home" component={MyDrawer} />
       </Stack.Navigator>

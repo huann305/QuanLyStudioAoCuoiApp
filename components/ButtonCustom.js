@@ -1,12 +1,12 @@
 import { StyleSheet, Text, TouchableOpacity, } from 'react-native'
 import React from 'react'
 
-const ButtonCustom = ({onPress, title}) => {
+const ButtonCustom = (props) => {
   return (
     <TouchableOpacity
-      onPress={onPress}
-      style={[styles.button]}>
-      <Text style={{textAlign: 'center', color: "#fff", fontWeight: '500' }}>{title}</Text>
+      onPress={props.onPress}
+      style={[styles.button, props.style]}>
+      <Text style={{textAlign: 'center', color: "#fff", fontWeight: '500' }}>{props.title}</Text>
     </TouchableOpacity>
   )
 }
