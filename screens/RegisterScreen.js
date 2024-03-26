@@ -9,6 +9,8 @@ const RegisterScreen = ({ navigation }) => {
     const [username, setusername] = useState("")
     const [password, setpassword] = useState("")
     const [repassword, setrepassword] = useState("")
+    const [email, setemail] = useState("")
+    const [phoneNumber, setphoneNumber] = useState("")
     return (
         <View style={{
             flex: 1,
@@ -19,7 +21,13 @@ const RegisterScreen = ({ navigation }) => {
         }}>
             <TextInputCustom style={{
                 width: '100%'
-            }} onChangeText={setusername} lable={"Username"} placeholder="abc@gmail.com" />
+            }} onChangeText={setusername} lable={"Username"} placeholder="username" />
+            <TextInputCustom style={{
+                width: '100%'
+            }} onChangeText={setemail} lable={"Email"} placeholder="bahuan@gmail.com" />
+            <TextInputCustom style={{
+                width: '100%'
+            }} onChangeText={setphoneNumber} lable={"Phone Number"} placeholder="0987654321" />
             <TextInputCustom style={{
                 width: '100%'
             }} onChangeText={setpassword} lable={"Password"} placeholder="*********" />
@@ -45,21 +53,20 @@ const RegisterScreen = ({ navigation }) => {
                         body: JSON.stringify({
                             username: username,
                             password: password,
-                            fullName: '',
-                            email: '',
-                            phoneNumber: '',
-                            address: ''
+                            email: email,
+                            phoneNumber: phoneNumber,
+                            role: 'employee'
                         })
                     })
                         .then(res => {
-                            if(res.status === 200) return res.json()
+                            if (res.status === 200) return res.json()
                             else return null
                         })
                         .then(json => {
-                            if(json){
+                            if (json) {
                                 navigation.replace('Login', json)
                             }else{
-                                Alert.alert("Error", "Account already exist")
+                                Alert.alert("Error", "Check your information and try again")
                             }
                         })
                         .catch(err => console.log(err))

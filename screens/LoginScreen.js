@@ -42,7 +42,7 @@ const LoginScreen = ({ navigation }) => {
     }}>
       <TextInputCustom style={{
         width: '100%'
-      }} onChangeText={setusername} lable={"Username"} placeholder="abc@gmail.com" />
+      }} onChangeText={setusername} lable={"Username"} placeholder="username" />
       <TextInputCustom style={{
         width: '100%'
       }} onChangeText={setpassword} lable={"Password"} placeholder="*********" />

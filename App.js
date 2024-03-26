@@ -1,5 +1,5 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
 import { NavigationContainer } from '@react-navigation/native'
 import 'react-native-gesture-handler';
@@ -23,6 +23,8 @@ import RegisterScreen from './screens/RegisterScreen';
 const Drawer = createDrawerNavigator();
 
 const CustomDrawer = (props) => {
+  const data = useContext(DataContext)
+  console.log(data)
   return (
     <View style={{ flex: 1 }}>
       <DrawerContentScrollView {...props}>
@@ -37,10 +39,11 @@ const CustomDrawer = (props) => {
           <Image style={{
             height: 100,
             width: 100, borderRadius: 500
-          }} source={{ uri: 'https://th.bing.com/th/id/OIP.2xkM75es8XRe8faa3cec6QHaE7?w=298&h=199&c=7&r=0&o=5&dpr=1.3&pid=1.7' }} />
+          }} source={require('./img/image.png')} />
           <View>
-            <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 20 }}>Vũ Bá Huấn</Text>
-            <Text style={{ color: '#D9D9D9' }}>bahuan305@gmail.com</Text>
+            <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 20 }}>{data.fullName==""?"Chưa cập nhật tên":data.fullName}</Text>
+            <Text style={{ color: '#D9D9D9' }}>{data.email==""?"Chưa cập nhật email":data.email}</Text>
+            <Text style={{ color: '#D9D9D9' }}>{data.role}</Text>
           </View>
         </View>
         <DrawerItemList {...props} />
@@ -61,7 +64,7 @@ function MyDrawer({ route }) {
       <Drawer.Navigator
       initialRouteName='ServiceManagementScreen'
         screenOptions={{ headerStyle: { backgroundColor: 'transparent', elevation: 0, shadowOpacity: 0 }, drawerLabelStyle: { color: '#686868' } }}
-        drawerContent={props => <CustomDrawer {...props} />}>
+        drawerContent={props => <CustomDrawer {...props}/>}>
         <Drawer.Screen name="ServiceManagementScreen" options={{ title: 'Quản lý dịch vụ' }} component={ServiceManagementScreen} />
         <Drawer.Screen name="EmployeeManagementScreen" options={{ title: 'Quản lý nhân viên' }} component={EmployeeManagementScreen} />
         <Drawer.Screen name="TaskManagementScreen" options={{ title: 'Quản lý công việc' }} component={TaskManagementScreen} />

@@ -8,11 +8,10 @@ import ButtonCustom from '../components/ButtonCustom';
 const UpdateInforScreen = () => {
   const data = useContext(DataContext)
   console.log(data)
-  const [fullName, setFullName] = useState(data?.fullName? data.fullName: "")
+  const [fullName, setFullName] = useState(data?.fullName ? data.fullName : "")
   const [email, setEmail] = useState(data?.email ? data.email : "")
   const [phoneNumber, setPhoneNumber] = useState(data?.phoneNumber ? data.phoneNumber : "")
   const [address, setAddress] = useState(data?.address ? data.address : "")
-  console.log(data)
   return (
     <View style={{ flex: 1, alignItems: 'center', padding: 10 }}>
       <View>
@@ -52,10 +51,19 @@ const UpdateInforScreen = () => {
                 phoneNumber: phoneNumber,
                 address: address
               })
-            }).then((res) => res.json())
+            }).then((res) => {
+              if (res.status === 200) return res.json()
+              if (res.status === 500) {
+                return null
+              }
+            })
               .then((data) => {
-                console.log(data)
-                Alert.alert('Cập nhật thành công')
+                if (data) {
+                  console.log(data)
+                  Alert.alert('Cập nhật thành công')
+                }else{
+                  Alert.alert('Cập nhật thất bại', 'Email đã tồn tại')
+                }
               })
               .catch((err) => {
                 console.log(err)
