@@ -1,4 +1,5 @@
 import {
+  Alert,
   FlatList,
   Image,
   ScrollView,
@@ -10,15 +11,26 @@ import {
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import BASE_URL from '../base/BASE_URL';
+import {Modal} from 'react-native';
 
 //url
-
 const url = `${BASE_URL}/employees`;
-const EmployeeManagementScreen = () => {
+const EmployeeManagementScreen = ({navigation}) => {
   const [data, setData] = useState([]);
   //dùng index để sau này thi index thay đổi thì sẽ load lại dữ liệu trên flastlist
   const [index, setindex] = useState(0);
-  const [loading, setloading] = useState(true);
+  const [visibleModalAdd, setVisibleModalAdd] = useState(false);
+  //
+  const [fullName, setFullName] = useState('');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [errFullName, setErrFullName] = useState(null);
+  const [errUserName, setErrUsername] = useState(null);
+  const [errPassword, setErrPassword] = useState(null);
+  const [errEmail, setErrEmail] = useState(null);
+  const [errPhone, setErrPhone] = useState(null);
 
   //fetch danh sách nhân viên
   const getListEmployees = async () => {
@@ -26,54 +38,154 @@ const EmployeeManagementScreen = () => {
       const res = await fetch(url);
       const result = await res.json();
       setData(result);
-      setloading(false);
       console.log('Fetching data is succesfully');
     } catch (err) {
       console.error('Error fetching data: ' + err);
     }
+  };
+  //cập nhật lại danh sách sau khi cập nhật item bên DetailEmp
+  const refreshList = () => {
+    getListEmployees();
   };
   //useEffect
   useEffect(() => {
     getListEmployees();
   }, []);
 
+  //thêm mới nhân viên
+  const handleAdd = () => {
+    if (fullName == '') {
+      setErrFullName('Không bỏ trống thông tin');
+    } else {
+      setErrFullName('');
+    }
+    if (username == '') {
+      setErrUsername('Không bỏ trống thông tin');
+    } else {
+      setErrUsername('');
+    }
+    if (password == '') {
+      setErrPassword('Không bỏ trống thông tin');
+    } else if (password.length <= 6) {
+      setErrPassword('Mật khẩu phải có từ 6 ký tự trở lên');
+    } else {
+      setErrPassword('');
+    }
+    if (email == '') {
+      setErrEmail('Không bỏ trống thông tin');
+    } else if (email.indexOf('@') == -1 || email.indexOf('.') == -1) {
+      setErrEmail('Email chưa đúng định dạng');
+    } else {
+      setErrEmail('');
+    }
+    const regexPhone = /^0\d{9}$/;
+    if (phoneNumber == '') {
+      setErrPhone('Không bỏ trống thông tin');
+    } else if (!regexPhone.test(phoneNumber)) {
+      setErrPhone('Số điện thoại chưa đúng định dạng');
+    } else {
+      setErrPhone('');
+    }
+    if (
+      errFullName == '' &&
+      errEmail == '' &&
+      errPassword == '' &&
+      errUserName == '' &&
+      errPhone == ''
+    ) {
+      console.log(username, password);
+      // Tạo đối tượng dữ liệu
+      let objEmployee = {
+        username: username,
+        password: password,
+        fullName: fullName,
+        email: email,
+        phoneNumber: phoneNumber,
+        note: '',
+        role: 'Đang cập nhật',
+        image: '',
+        status: '1',
+      };
+      fetch(url, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(objEmployee),
+      })
+        .then(res => {
+          if (res.status === 200) {
+            Alert.alert('Thêm thành công');
+            setPassword('');
+            setUsername('');
+            setFullName('');
+            setEmail('');
+            setindex(res.json.length);
+            setPhoneNumber('');
+            setVisibleModalAdd(false);
+            //thêm thành công, gọi hàm getListEmployees để ud ds
+            getListEmployees();
+          } else {
+            throw new Error('Thêm không thành công');
+          }
+        })
+        .catch(error => {
+          console.error('Thêm không thành công:', error);
+        });
+    } else return;
+  };
+
   //item
   const ItemEmployee = ({item}) => {
     return (
-      <TouchableOpacity
-        style={styles.itemE}
-        onPress={navigation.navigate('DetailEmployeeScreen')}>
-        <Image
-          source={{
-            uri: item.image,
-          }}
-          resizeMode="cover"
-          style={styles.img}
-        />
-        <View style={styles.tt}>
-          <Text style={{color: 'black', fontWeight: '500', fontSize: 18}}>
-            {item.fullName}
-          </Text>
-          <Text>Chức vụ: {item.role}</Text>
-        </View>
-        <Image source={require('../img/chevron.png')} />
-      </TouchableOpacity>
+      <View>
+        <TouchableOpacity
+          style={styles.itemE}
+          onPress={() => {
+            navigation.navigate('DetailEmployeeScreen', {item, refreshList});
+          }}>
+          {item.image == '' ? (
+            <Image
+              source={require('../img/avt.png')}
+              resizeMode="cover"
+              style={styles.img}
+            />
+          ) : (
+            <Image
+              source={{
+                uri: item.image,
+              }}
+              resizeMode="cover"
+              style={styles.img}
+            />
+          )}
+
+          <View style={styles.tt}>
+            <Text style={{color: 'black', fontWeight: '500', fontSize: 18}}>
+              {item.fullName}
+            </Text>
+            <Text>Chức vụ: {item.role}</Text>
+            <Text>
+              Trang thái:{' '}
+              {item.status == 1 ? (
+                <Text>Đang hoạt động</Text>
+              ) : (
+                <Text>Đã nghỉ việc</Text>
+              )}
+            </Text>
+          </View>
+          <Image source={require('../img/chevron.png')} />
+        </TouchableOpacity>
+      </View>
     );
   };
   return (
     <View style={styles.ctn}>
-      <View style={styles.v1}>
-        <TouchableOpacity
-          onPress={() => navigation.navigate('ServiceManagementScreen')}>
-          <Image source={require('../img/arrowleft.png')} />
-        </TouchableOpacity>
-        <Text style={styles.title}>Quản lý nhân viên</Text>
-        <Text></Text>
-      </View>
       <TouchableOpacity onPress={() => {}}>
         <Image
           source={require('../img/filter.png')}
-          style={{alignSelf: 'flex-end', marginVertical: 10}}
+          style={{alignSelf: 'flex-end', marginVertical: 5}}
         />
       </TouchableOpacity>
       <View style={styles.search}>
@@ -83,15 +195,82 @@ const EmployeeManagementScreen = () => {
         />
         <TextInput placeholder="Search" />
       </View>
+      <ScrollView style={{flex: 10}}>
+        <FlatList
+          data={data}
+          keyExtractor={item => item._id}
+          extraData={index}
+          renderItem={({item}) => {
+            return <ItemEmployee item={item} />;
+          }}
+          nestedScrollEnabled={false}
+          scrollEnabled={false}
+        />
+      </ScrollView>
 
-      <FlatList
-        data={data}
-        keyExtractor={item => item._id}
-        extraData={index}
-        renderItem={({item}) => {
-          return <ItemEmployee item={item} />;
-        }}
-      />
+      <View style={{justifyContent: 'flex-end', alignItems: 'flex-end'}}>
+        <TouchableOpacity
+          style={styles.btnAdd}
+          onPress={() => setVisibleModalAdd(true)}>
+          <Text style={{color: 'white', fontSize: 30}}>+</Text>
+        </TouchableOpacity>
+      </View>
+      {/* modal thêm mới */}
+      <Modal animationType="slide" visible={visibleModalAdd} transparent={true}>
+        <View style={styles.modalEdit}>
+          <View style={styles.dialogEdit}>
+            <Text style={styles.titleModal}>Thêm mới nhân viên</Text>
+            <TextInput
+              placeholder="Fullname"
+              style={styles.textInput}
+              value={fullName}
+              onChangeText={setFullName}
+            />
+            <Text style={styles.err}>{errFullName}</Text>
+            <TextInput
+              placeholder="Username"
+              style={styles.textInput}
+              value={username}
+              onChangeText={setUsername}
+            />
+            <Text style={styles.err}>{errUserName}</Text>
+            <TextInput
+              placeholder="Password"
+              style={styles.textInput}
+              value={password}
+              onChangeText={setPassword}
+            />
+            <Text style={styles.err}>{errPassword}</Text>
+            <TextInput
+              placeholder="Email"
+              style={styles.textInput}
+              value={email}
+              onChangeText={setEmail}
+            />
+            <Text style={styles.err}>{errEmail}</Text>
+            <TextInput
+              placeholder="Phonenumber"
+              style={styles.textInput}
+              value={phoneNumber}
+              onChangeText={setPhoneNumber}
+            />
+            <Text style={styles.err}>{errPhone}</Text>
+
+            <View style={styles.btnModal}>
+              <TouchableOpacity onPress={handleAdd} style={styles.btnThem}>
+                <Text style={{color: 'white'}}>Thêm</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.btnThem, {backgroundColor: 'white'}]}
+                onPress={() => {
+                  setVisibleModalAdd(false);
+                }}>
+                <Text>Cancel</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -101,6 +280,8 @@ export default EmployeeManagementScreen;
 const styles = StyleSheet.create({
   ctn: {
     marginHorizontal: 15,
+    flexDirection: 'column',
+    flex: 1,
   },
   search: {
     backgroundColor: '#EEEDEB',
@@ -109,20 +290,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 20,
     height: 40,
-    marginBottom: 10,
+    marginBottom: 20,
   },
-  v1: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginTop: 20,
-  },
-  title: {
-    color: 'black',
-    fontWeight: '500',
-    alignSelf: 'center',
-    fontSize: 20,
-  },
+
   itemE: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -141,5 +311,62 @@ const styles = StyleSheet.create({
   tt: {
     flex: 4,
     marginHorizontal: 10,
+  },
+  modalEdit: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+    backgroundColor: 'rgba( 128, 128, 128, 0.5 )',
+  },
+  dialogEdit: {
+    // alignItems: 'center',
+    margin: 40,
+    padding: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+  },
+  btnAdd: {
+    width: 50,
+    height: 50,
+    borderRadius: 50,
+    backgroundColor: '#409087',
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin: 15,
+  },
+  textInput: {
+    borderRadius: 15,
+    borderColor: 'gray',
+    borderWidth: 0.5,
+    paddingVertical: 5,
+    width: 250,
+    paddingHorizontal: 20,
+  },
+  err: {
+    color: 'red',
+    fontSize: 12,
+    marginBottom: 10,
+    alignItems: 'flex-start',
+  },
+  btnThem: {
+    width: 100,
+    backgroundColor: '#409087',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 35,
+    borderRadius: 15,
+  },
+  titleModal: {
+    fontSize: 20,
+    color: 'black',
+    fontWeight: 'bold',
+    marginBottom: 20,
+    alignSelf: 'center',
+  },
+  btnModal: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginVertical: 20,
   },
 });
