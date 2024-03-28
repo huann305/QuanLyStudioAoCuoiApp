@@ -6,7 +6,7 @@ import BASE_URL from '../base/BASE_URL'
 import TextWith2Line from '../components/TextWith2Line'
 import IconWithBorder from '../components/IconWithBorder'
 
-const URL_REGISTER = `${BASE_URL}/employees`
+const URL_REGISTER = `${BASE_URL}/employees`;
 
 const RegisterScreen = ({ navigation }) => {
     const [username, setusername] = useState("")
@@ -85,6 +85,6 @@ const RegisterScreen = ({ navigation }) => {
     )
 }
 
-export default RegisterScreen
+export default RegisterScreen;
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({});

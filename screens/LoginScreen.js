@@ -6,35 +6,35 @@ import BASE_URL from '../base/BASE_URL'
 import TextWith2Line from '../components/TextWith2Line'
 import IconWithBorder from '../components/IconWithBorder'
 
-const URL_LOGIN = `${BASE_URL}/login`
+const URL_LOGIN = `${BASE_URL}/login`;
 
 const login = (username, password, navigation) => {
   fetch(URL_LOGIN, {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify({
       username: username,
       password: password
     })
   }).then(res => {
-    if (res.status === 200) return res.json()
-    else return null
+    return res.json()
   })
     .then(data => {
+      console.log(data)
       if (data) {
         navigation.replace('Home', data)
       } else {
         Alert.alert("Error", "Username or password not match")
       }
     })
-    .catch(err => console.log(err))
-}
+    .catch(err => console.log(err));
+};
 
-const LoginScreen = ({ navigation }) => {
-  const [username, setusername] = useState("")
-  const [password, setpassword] = useState("")
+const LoginScreen = ({navigation}) => {
+  const [username, setusername] = useState('');
+  const [password, setpassword] = useState('');
   return (
     <View style={{
       flex: 1,
@@ -54,7 +54,7 @@ const LoginScreen = ({ navigation }) => {
       <ButtonCustom
         style={{
           width: '100%',
-          marginTop: 10
+          marginTop: 10,
         }}
         title={"Login"} onPress={() => {
           login(username, password, navigation)
@@ -73,9 +73,9 @@ const LoginScreen = ({ navigation }) => {
         }} >Register</Text>
       </Text>
     </View>
-  )
-}
+  );
+};
 
-export default LoginScreen
+export default LoginScreen;
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({});
