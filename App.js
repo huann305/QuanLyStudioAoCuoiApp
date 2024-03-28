@@ -24,6 +24,7 @@ import UpdateInforScreen from './screens/UpdateInforScreen';
 import ChangePasswordScreen from './screens/ChangePasswordScreen';
 import DataContext from './screens/Context/DataContext';
 import RegisterScreen from './screens/RegisterScreen';
+import DetailServiceScreen from './screens/DetailServiceScreen';
 const Drawer = createDrawerNavigator();
 
 const CustomDrawer = (props) => {
@@ -88,7 +89,7 @@ const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="WelcomeScreen"
+        initialRouteName="ServiceManagementScreen"
         screenOptions={{ headerShown: false }}>
         <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} />
         <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
@@ -101,6 +102,14 @@ const App = () => {
         <Stack.Screen
           name="EmployeeManagementScreen"
           component={EmployeeManagementScreen}
+        />
+         <Stack.Screen
+          name="DetailServiceScreen"
+          component={DetailServiceScreen}
+        />
+         <Stack.Screen
+          name="ServiceManagementScreen"
+          component={ServiceManagementScreen}
         />
       </Stack.Navigator>
     </NavigationContainer>
