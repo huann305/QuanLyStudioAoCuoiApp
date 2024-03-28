@@ -1,8 +1,10 @@
-import { Alert, StyleSheet, Text, View } from 'react-native'
+import { Alert, Image, StyleSheet, Text, View } from 'react-native'
 import React, { useState } from 'react'
 import TextInputCustom from '../components/TextInputCustom'
 import ButtonCustom from '../components/ButtonCustom'
 import BASE_URL from '../base/BASE_URL'
+import TextWith2Line from '../components/TextWith2Line'
+import IconWithBorder from '../components/IconWithBorder'
 
 const URL_REGISTER = `${BASE_URL}/employees`
 
@@ -17,9 +19,11 @@ const RegisterScreen = ({ navigation }) => {
             flex: 1,
             justifyContent: 'center',
             alignItems: 'center',
-            padding: 10,
+            padding: 20,
             backgroundColor: '#DBFBF6'
         }}>
+            <Image style={{ height: 200, resizeMode: 'contain', marginBottom: 20 }} source={require('../img/logo_app.png')} />
+            <Text style={{ fontSize: 34, color: "#474747", fontWeight: '500' }}>REGISTER</Text>
             <TextInputCustom style={{
                 width: '100%'
             }} onChangeText={setusername} lable={"Username"} placeholder="username" />
@@ -66,20 +70,17 @@ const RegisterScreen = ({ navigation }) => {
                         .then(json => {
                             if (json) {
                                 navigation.replace('Login', json)
-                            }else{
+                            } else {
                                 Alert.alert("Error", "Check your information and try again")
                             }
                         })
                         .catch(err => console.log(err))
                 }} />
-            <ButtonCustom
-                style={{
-                    width: '100%',
-                    marginTop: 10
-                }}
-                title={"Login"} onPress={() => {
+            <Text style={{ position: 'absolute', bottom: 10 }}>
+                You have an account? <Text style={{ color: '#000', fontWeight: 'bold' }} onPress={() => {
                     navigation.replace('Login')
-                }} />
+                }} >Login</Text>
+            </Text>
         </View>
     )
 }

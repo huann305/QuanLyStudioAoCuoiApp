@@ -89,7 +89,7 @@ const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="ServiceManagementScreen"
+        initialRouteName="WelcomeScreen"
         screenOptions={{ headerShown: false }}>
         <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} />
         <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
