@@ -1,7 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, Text, SafeAreaView, FlatList, TouchableOpacity, Image, StyleSheet, Modal, Pressable, Alert } from 'react-native';
-import TextInputCus from '../components/TextInputCustom';
-import ButtonCustom from '../components/ButtonCustom';
+import { View, Text, SafeAreaView, FlatList, TouchableOpacity, Image, StyleSheet, Modal, TextInput, Pressable, Alert } from 'react-native';
 
 const URL_services = `${BASE_URL}/services`;
 const URL_servicedetails = `${BASE_URL}/servicedetails`;
@@ -162,7 +160,7 @@ const ServiceManagementScreen = ({ navigation }) => {
         onPress={() => {
           setModalVisibleAdd(!modalVisibleAdd);
         }}>
-        <Image source={require('../img/sign.png')} />
+        <Image source={require('../img/sign.png')}/>
       </TouchableOpacity>
       <Text>Services</Text>
       <FlatList
@@ -171,8 +169,8 @@ const ServiceManagementScreen = ({ navigation }) => {
         renderItem={({ item }) => (
           <View style={{ flex: 1, flexDirection: 'column', margin: 10 }}>
             <View style={styles.roww}>
-              <Image style={[styles.star, { marginRight: 40 }]} source={require('../img/star.png')} />
-              <Text style={[styles.star, styles.em]}>{item.serviceName}</Text>
+              <Image style={[styles.star, {marginRight: 40}] } source={require('../img/star.png')} />
+              <Text style={[styles.star,styles.em]}>{item.serviceName}</Text>
             </View>
             <View style={{ marginTop: 10 }}>
               <View style={{ backgroundColor: 'orange', padding: 8 }}>
@@ -215,35 +213,33 @@ const ServiceManagementScreen = ({ navigation }) => {
         <View style={styles.centeredViewU}>
           <View style={styles.modalViewU}>
             <Text style={[styles.modalTextU, , styles.modalCenter]}>Thêm</Text>
-            <TextInputCus
+            <TextInput
               placeholder='Nhập serviceName'
               onChangeText={(text) => setAddData(prevData => ({ ...prevData, serviceName: text }))} />
-            <TextInputCus
-              placeholder='Nhập serviceDescription'
+            <TextInput
+               placeholder='Nhập serviceDescription'
               onChangeText={(text) => setAddData(prevData => ({ ...prevData, serviceDescription: text }))} />
-            <TextInputCus
+            <TextInput
               placeholder='Nhập title'
               onChangeText={(text) => setAddData(prevData => ({ ...prevData, title: text }))} />
-            <TextInputCus
-              placeholder='Nhập price'
+            <TextInput
+             placeholder='Nhập price'
               onChangeText={(text) => setAddData(prevData => ({ ...prevData, price: text }))} />
             {/* <View style={styles.roww}> */}
-              <ButtonCustom
-                style={{ marginTop: 10 }}
-                title={'Thêm'}
-                onPress={() => {
+              <Pressable
+                style={[ styles.buttonU, styles.buttonCloseU]} onPress={() => {
                   ServiceDetailAdd();
                   setModalVisibleAdd(false);
-                }}
-              />
-              
-              <ButtonCustom
-                style={{ marginTop: 10 }}
-                title={'Hủy'}
-                onPress={() => {
-                  setModalVisibleAdd(false);
-                }}
-              />
+                }}>
+                <Text  style={{ textAlign: 'center' }}>Thêm</Text>
+              </Pressable>
+              <Pressable
+                style={[  styles.buttonU, styles.buttonCloseU]}
+                onPress={() =>
+                  setModalVisibleAdd(false)
+                }>
+                <Text style={{ textAlign: 'center' }}>Hủy</Text>
+              </Pressable>
             {/* </View> */}
           </View>
         </View>
@@ -256,32 +252,32 @@ const ServiceManagementScreen = ({ navigation }) => {
       >
         <View style={styles.centeredViewU}>
           <View style={styles.modalViewU}>
-            <Text style={[styles.modalTextU, styles.modalCenter]}>Cập nhật</Text>
-            <TextInputCus
+            <Text style={[styles.modalTextU, styles.modalCenter  ]}>Cập nhật</Text>
+            <TextInput
               placeholder='Nhập serviceName'
               onChangeText={(text) => setUpdateData(prevData => ({ ...prevData, serviceName: text }))} />
-            <TextInputCus
+            <TextInput
               placeholder='Nhập serviceDescription'
               onChangeText={(text) => setUpdateData(prevData => ({ ...prevData, serviceDescription: text }))} />
-            <TextInputCus
+            <TextInput
               placeholder='Nhập title'
               onChangeText={(text) => setUpdateData(prevData => ({ ...prevData, title: text }))} />
-            <TextInputCus
+            <TextInput
               placeholder='Nhập price'
               onChangeText={(text) => setUpdateData(prevData => ({ ...prevData, price: text }))} />
-            <ButtonCustom
-              style={{ marginTop: 10 }}
-              title={'Cập nhật'}
+            <Pressable
+              style={[styles.buttonU, styles.buttonCloseU]}
               onPress={() => {
                 handleUpdate();
                 setModalVisibleUpdate(false);
-              }}
-            />
-            <ButtonCustom
-              style={{ marginTop: 10 }}
-              title={'Hủy'}
-              onPress={() => setModalVisibleUpdate(false)}
-            />
+              }}>
+              <Text>Cập nhật</Text>
+            </Pressable>
+            <Pressable
+              style={[styles.buttonU, styles.buttonCloseU]}
+              onPress={() => setModalVisibleUpdate(false)}>
+              <Text style={{ textAlign: 'center' }}>Hủy</Text>
+            </Pressable>
           </View>
         </View>
       </Modal>
@@ -294,13 +290,9 @@ export default ServiceManagementScreen;
 const styles = StyleSheet.create({
   centeredViewU: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.5)',
-    justifyContent: 'center',
-    alignItems: 'center'
   },
   modalViewU: {
     margin: 30,
-    width: '90%',
     backgroundColor: 'white',
     borderRadius: 20,
     padding: 50,
@@ -323,22 +315,22 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     color: 'black'
   },
-  modalCenter: {
+  modalCenter:{
     fontSize: 20,
-    fontWeight: 'bold',
-    alignSelf: 'center'
+     fontWeight: 'bold',
+      alignSelf: 'center'
   },
   roww: {
     flex: 1,
     flexDirection: 'row'
   },
-  star: {
+  star:{
     alignItems: 'center',
-    alignSelf: 'center'
+     alignSelf: 'center'
   },
-  em: {
+  em:{
     fontSize: 20,
-    fontWeight: 'bold',
-    color: 'black'
+     fontWeight: 'bold',
+      color: 'black' 
   }
 });
