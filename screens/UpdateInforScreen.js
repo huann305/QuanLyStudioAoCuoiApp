@@ -13,7 +13,7 @@ const UpdateInforScreen = () => {
   const [phoneNumber, setPhoneNumber] = useState(data?.phoneNumber ? data.phoneNumber : "")
   const [address, setAddress] = useState(data?.address ? data.address : "")
   return (
-    <View style={{ flex: 1, alignItems: 'center', padding: 10 }}>
+    <View style={{ flex: 1, alignItems: 'center', padding: 20 }}>
       <View>
         <Image style={{
           height: 150,
@@ -25,7 +25,7 @@ const UpdateInforScreen = () => {
         <TextInputCus
           defaultValue={fullName}
           onChangeText={setFullName}
-          lable={'Họ tên'} />
+          lable={'Full name'} />
         <TextInputCus
           defaultValue={email}
           onChangeText={setEmail}
@@ -33,11 +33,11 @@ const UpdateInforScreen = () => {
         <TextInputCus
           defaultValue={phoneNumber}
           onChangeText={setPhoneNumber}
-          lable={'Số điện thoại'} />
+          lable={'Phone number'} />
         <TextInputCus
           defaultValue={address}
           onChangeText={setAddress}
-          lable={'Địa chỉ'} />
+          lable={'Address'} />
         <ButtonCustom
           onPress={() => {
             fetch(`http://10.0.2.2:3000/api/employees/${data._id}`, {
