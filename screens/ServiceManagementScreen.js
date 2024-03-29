@@ -5,6 +5,7 @@ const URL_services = `${BASE_URL}/services`;
 const URL_servicedetails = `${BASE_URL}/serviceDetails`;
 import TextInputCus from '../components/TextInputCustom';
 import ButtonCustom from '../components/ButtonCustom';
+import * as ImagePicker from 'react-native-image-picker';
 
 let idItem = '';
 let idItemD = '';
@@ -17,6 +18,14 @@ const ServiceManagementScreen = ({ navigation }) => {
   const [modalUpdateService, setmodalUpdateService] = useState(false);
   const [modalVisibleAddD, setModalVisibleAddD] = useState(false);
   const [hinhAnh, sethinhAnh] = useState(null)
+
+  const chonAnh = useCallback(() => {
+    let option = {
+      mediaType: 'photo',
+      selectionLimit: 0,
+    }
+    ImagePicker.launchImageLibrary(option, sethinhAnh);
+  }, []);
 
   const [updateDataServiceD, setUpdateDataServiceD] = useState({
     title: '',
@@ -93,15 +102,24 @@ const ServiceManagementScreen = ({ navigation }) => {
   const ServiceAdd = () => {
     const objService = {
       serviceName: addDataService.serviceName,
-      description: addDataService.serviceDescription
+      description: addDataService.serviceDescription,
     };
+    
+    const formData = new FormData()
+    formData.append('image', {
+      uri: hinhAnh.assets[0].uri,
+      type: hinhAnh.assets[0].type,
+      name: hinhAnh.assets[0].fileName
+    })
+    formData.append('serviceName', objService.serviceName)
+    formData.append('description', objService.description)
     fetch(URL_services, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
-        'Content-Type': 'application/json',
+        'Content-Type': 'multipart/form-data'
       },
-      body: JSON.stringify(objService),
+      body: formData,
     })
       .then(response => {
         if (response.ok) {
@@ -117,17 +135,21 @@ const ServiceManagementScreen = ({ navigation }) => {
     setmodalUpdateService(!modalUpdateService);
     //call update service
     const url = URL_services + `/${idItemD}`;
-    console.log(url)
+    const formData = new FormData();
+    formData.append('image', {
+      uri: hinhAnh.assets[0].uri,
+      type: hinhAnh.assets[0].type,
+      name: hinhAnh.assets[0].fileName
+    })
+    formData.append('serviceName', addDataService.serviceName)
+    formData.append('description', addDataService.serviceDescription)
     fetch(url, {
       method: 'PUT',
       headers: {
         Accept: 'application/json',
-        'Content-Type': 'application/json',
+        'Content-Type': 'multipart/form-data',
       },
-      body: JSON.stringify({
-        serviceName: addDataService.serviceName,
-        description: addDataService.serviceDescription
-      }),
+      body: formData,
     }).then(response => {
       if (response.ok) {
         servicesData();
@@ -175,6 +197,9 @@ const ServiceManagementScreen = ({ navigation }) => {
         <View style={{ marginTop: 10 }}>
           <View style={{ backgroundColor: 'orange', padding: 8 }}>
             <Text style={{ textAlign: 'center', fontSize: 15, fontWeight: 'bold', color: '#fff' }}>{item.serviceName}</Text>
+          </View>
+          <View>
+            <Image source={{ uri: item.image }} style={{ width: '100%', height: 200 }} />
           </View>
           <View>
             <Text style={{ borderBottomWidth: 1 }}>{item.description}</Text>
@@ -239,6 +264,28 @@ const ServiceManagementScreen = ({ navigation }) => {
     )
   }
 
+  const resetData = ()=>{
+    sethinhAnh(null);
+    setmodalUpdateService(false);
+    setUpdateDataServiceD({
+      title: '',
+      price: '',
+      status: ''
+    })
+    setaddDataService({
+      serviceName: '',
+      serviceDescription: ''
+    })
+    setModalVisibleAdd(false);
+    setModalVisibleUpdate(false);
+    setModalVisibleAddD(false);
+    setaddDataServiceD({
+      title: '',
+      price: '',
+      status: ''
+    })
+  }
+
   return (
     <SafeAreaView>
       <TouchableOpacity
@@ -263,6 +310,22 @@ const ServiceManagementScreen = ({ navigation }) => {
         <View style={styles.centeredViewU}>
           <View style={styles.modalViewU}>
             <Text style={[styles.modalTextU, styles.modalCenter]}>Thêm</Text>
+            {hinhAnh ? <View onPress={chonAnh} style={{ justifyContent: 'center', alignItems: 'center' }}>
+              <View style={{ borderRadius: 10, width: 100, justifyContent: 'center' }}>
+                <Image source={{ uri: hinhAnh.assets[0].uri }} style={{ width: 100, height: 100, borderRadius: 10 }} />
+                <TouchableOpacity onPress={chonAnh} style={{ position: 'absolute', bottom: -10, right: -10 }}>
+                  <View style={{ backgroundColor: '#ccc', padding: 10, borderRadius: 10 }}>
+                    <Image source={require('../img/camera.png')} style={{ width: 20, height: 20 }} />
+                  </View>
+                </TouchableOpacity>
+              </View>
+            </View> :
+              <TouchableOpacity onPress={chonAnh} style={{ justifyContent: 'center', alignItems: 'center' }}>
+                <View style={{ backgroundColor: '#ccc', padding: 10, borderRadius: 10, width: 120, justifyContent: 'center' }}>
+                  <Image source={require('../img/camera.png')} style={{ width: 100, height: 100 }} />
+                </View>
+              </TouchableOpacity>
+            }
             <TextInputCus
               placeholder='Nhập serviceName'
               onChangeText={(text) => setaddDataService(prevData => ({ ...prevData, serviceName: text }))} />
@@ -271,10 +334,11 @@ const ServiceManagementScreen = ({ navigation }) => {
               onChangeText={(text) => setaddDataService(prevData => ({ ...prevData, serviceDescription: text }))} />
             <ButtonCustom style={{ marginTop: 10 }} onPress={() => {
               ServiceAdd();
-              setModalVisibleAdd(false);
+              resetData()
             }} title={'Thêm'} />
             <ButtonCustom style={{ marginTop: 10 }} onPress={() => {
               setModalVisibleAdd(false);
+              resetData()
             }} title={'Hủy'} />
           </View>
         </View>
@@ -287,6 +351,22 @@ const ServiceManagementScreen = ({ navigation }) => {
         <View style={styles.centeredViewU}>
           <View style={styles.modalViewU}>
             <Text style={[styles.modalTextU, styles.modalCenter]}>Cập nhật</Text>
+            {hinhAnh ? <View onPress={chonAnh} style={{ justifyContent: 'center', alignItems: 'center' }}>
+              <View style={{ borderRadius: 10, width: 100, justifyContent: 'center' }}>
+                <Image source={{ uri: hinhAnh.assets[0].uri }} style={{ width: 100, height: 100, borderRadius: 10 }} />
+                <TouchableOpacity onPress={chonAnh} style={{ position: 'absolute', bottom: -10, right: -10 }}>
+                  <View style={{ backgroundColor: '#ccc', padding: 10, borderRadius: 10 }}>
+                    <Image source={require('../img/camera.png')} style={{ width: 20, height: 20 }} />
+                  </View>
+                </TouchableOpacity>
+              </View>
+            </View> :
+              <TouchableOpacity onPress={chonAnh} style={{ justifyContent: 'center', alignItems: 'center' }}>
+                <View style={{ backgroundColor: '#ccc', padding: 10, borderRadius: 10, width: 120, justifyContent: 'center' }}>
+                  <Image source={require('../img/camera.png')} style={{ width: 100, height: 100 }} />
+                </View>
+              </TouchableOpacity>
+            }
             <TextInputCus
               defaultValue={addDataService.serviceName}
               placeholder='Nhập serviceName'
@@ -298,10 +378,11 @@ const ServiceManagementScreen = ({ navigation }) => {
               onChangeText={(text) => setaddDataService(prevData => ({ ...prevData, serviceDescription: text }))} />
             <ButtonCustom style={{ marginTop: 10 }} onPress={() => {
               handleUpdateService()
-              setmodalUpdateService(false);
+              resetData()
             }} title={'Cập nhật'} />
             <ButtonCustom style={{ marginTop: 10 }} onPress={() => {
               setmodalUpdateService(false);
+              resetData()
             }} title={'Hủy'} />
           </View>
         </View>
