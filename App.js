@@ -142,7 +142,7 @@ const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="WelcomeScreen"
+        initialRouteName="Login"
         screenOptions={{headerShown: false}}>
         <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} />
         <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
@@ -157,14 +157,14 @@ const App = () => {
           name="EmployeeManagementScreen"
           component={EmployeeManagementScreen}
         />
-         <Stack.Screen
+        <Stack.Screen
           name="DetailServiceScreen"
           component={DetailServiceScreen}
         />
-         <Stack.Screen
+        <Stack.Screen
           name="ServiceManagementScreen"
           component={ServiceManagementScreen}
-          />
+        />
         <Stack.Screen
           name="DetailEmployeeScreen"
           component={DetailEmployeeScreen}
