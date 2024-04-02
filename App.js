@@ -26,6 +26,8 @@ import DataContext from './screens/Context/DataContext';
 import RegisterScreen from './screens/RegisterScreen';
 import DetailServiceScreen from './screens/DetailServiceScreen';
 import DetailEmployeeScreen from './screens/DetailEmployeeScreen';
+import AddBill from './screens/AddBill';
+import DetailBill from './screens/DetailBill';
 const Drawer = createDrawerNavigator();
 
 const CustomDrawer = props => {
@@ -49,7 +51,7 @@ const CustomDrawer = props => {
               width: 100,
               borderRadius: 500,
             }}
-            source={{uri: data.image}}
+            source={require('./img/image.png')}
           />
           <View>
             <Text style={{color: '#fff', fontWeight: 'bold', fontSize: 20}}>
@@ -78,7 +80,7 @@ function MyDrawer({route}) {
   return (
     <DataContext.Provider value={route.params}>
       <Drawer.Navigator
-        initialRouteName="ServiceManagementScreen"
+        initialRouteName="AddBill"
         screenOptions={{
           headerStyle: {
             backgroundColor: 'transparent',
@@ -88,6 +90,17 @@ function MyDrawer({route}) {
           drawerLabelStyle: {color: '#686868'},
         }}
         drawerContent={props => <CustomDrawer {...props} />}>
+        <Drawer.Screen
+          name="AddBill"
+          options={{title: 'Tạo hóa đơn'}}
+          component={AddBill}
+        />
+        <Drawer.Screen
+          name="BillManagementScreen"
+          options={{title: 'Quản lý hóa đơn'}}
+          component={BillManagementScreen}
+        />
+
         <Drawer.Screen
           name="ServiceManagementScreen"
           options={{title: 'Quản lý dịch vụ'}}
@@ -103,11 +116,7 @@ function MyDrawer({route}) {
           options={{title: 'Quản lý công việc'}}
           component={TaskManagementScreen}
         />
-        <Drawer.Screen
-          name="BillManagementScreen"
-          options={{title: 'Tạo hóa đơn'}}
-          component={BillManagementScreen}
-        />
+
         <Drawer.Screen
           name="TotalSalesScreen"
           options={{title: 'Tổng doanh số'}}
@@ -169,6 +178,12 @@ const App = () => {
           name="DetailEmployeeScreen"
           component={DetailEmployeeScreen}
         />
+        <Stack.Screen
+          name="BillManagementScreen"
+          component={BillManagementScreen}
+        />
+        <Stack.Screen name="AddBill" component={AddBill} />
+        <Stack.Screen name="DetailBill" component={DetailBill} />
       </Stack.Navigator>
     </NavigationContainer>
   );

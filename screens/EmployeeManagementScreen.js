@@ -50,9 +50,7 @@ const EmployeeManagementScreen = ({navigation}) => {
     ImagePicker.launchCamera(option, setHinhAnh);
   }, []);
   useEffect(() => {
-    console.log('hinh: ' + hinhAnh?.assets[0].uri);
     setUri(hinhAnh?.assets[0].uri);
-    console.log('URI: ' + uri);
   }, [hinhAnh]);
   const chonAnh = useCallback(() => {
     // định nghĩa option để gắn cho imagepicker
@@ -99,7 +97,6 @@ const EmployeeManagementScreen = ({navigation}) => {
       }
 
       formData.append('status', 1);
-      console.log('uri up: ' + uri);
 
       try {
         const response = await fetch(url, {
@@ -122,7 +119,6 @@ const EmployeeManagementScreen = ({navigation}) => {
         //thêm thành công, gọi hàm getListEmployees để ud ds
         getListEmployees();
         setHinhAnh(null);
-        console.log('Upload successful:', data);
       } catch (error) {
         console.error('Upload failed:', error);
       }
@@ -159,7 +155,6 @@ const EmployeeManagementScreen = ({navigation}) => {
       errUserName == '' &&
       errPhone == ''
     ) {
-      console.log(username, password);
       // Tạo đối tượng dữ liệu
       let objEmployee = {
         username: username,

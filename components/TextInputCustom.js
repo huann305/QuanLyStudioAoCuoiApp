@@ -7,6 +7,7 @@ const TextInputCus = (props) => {
       <Text style={{ fontSize: 16, color: "#4D4D4D" }}>{props.lable}</Text>
       <TextInput
         {...props}
+        spellCheck={false}
         placeholderTextColor={props.placeholderTextColor}
         style={[props.style, styles.input]}
       />
