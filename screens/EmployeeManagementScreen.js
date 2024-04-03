@@ -9,15 +9,18 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import BASE_URL from '../base/BASE_URL';
 import {Modal} from 'react-native';
+import * as ImagePicker from 'react-native-image-picker';
+import {Button} from 'react-native-elements';
 
 //url
 const url = `${BASE_URL}/employees`;
+
 const EmployeeManagementScreen = ({navigation}) => {
   const [data, setData] = useState([]);
-  //dùng index để sau này thi index thay đổi thì sẽ load lại dữ liệu trên flastlist
+  //dùng index => index thay đổi thì sẽ load lạiflastlist
   const [index, setindex] = useState(0);
   const [visibleModalAdd, setVisibleModalAdd] = useState(false);
   //
@@ -31,6 +34,96 @@ const EmployeeManagementScreen = ({navigation}) => {
   const [errPassword, setErrPassword] = useState(null);
   const [errEmail, setErrEmail] = useState(null);
   const [errPhone, setErrPhone] = useState(null);
+  const [uri, setUri] = useState(null);
+
+  //
+  const [hinhAnh, setHinhAnh] = useState(null);
+  const chupAnh = useCallback(() => {
+    // định nghĩa option để gắn cho imagepicker
+    let option = {
+      saveToPhotos: true,
+      mediaType: 'photo',
+      includeBase64: false,
+      includeExtra: true,
+    };
+    // khởi động camera để chụp ảnh
+    ImagePicker.launchCamera(option, setHinhAnh);
+  }, []);
+  useEffect(() => {
+    setUri(hinhAnh?.assets[0].uri);
+  }, [hinhAnh]);
+  const chonAnh = useCallback(() => {
+    // định nghĩa option để gắn cho imagepicker
+    let option = {
+      mediaType: 'photo',
+      selectionLimit: 0,
+    };
+    // khởi động camera để chụp ảnh
+    ImagePicker.launchImageLibrary(option, setHinhAnh);
+  }, []);
+
+  const uploadImage = async () => {
+    validate();
+    if (
+      errFullName == '' &&
+      errEmail == '' &&
+      errPassword == '' &&
+      errUserName == '' &&
+      errPhone == ''
+    ) {
+      const formData = new FormData();
+      formData.append('username', username);
+      formData.append('password', password);
+      formData.append('fullName', fullName);
+      formData.append('email', email);
+      // formData.append('address', adress);
+      formData.append('address', '');
+
+      formData.append('phoneNumber', phoneNumber);
+      // formData.append('note', note);
+      formData.append('note', '');
+
+      // formData.append('role', role);
+      formData.append('role', '');
+
+      // Kiểm tra xem hinhAnh và hinhAnh?.assets có tồn tại và không rỗng
+      if (hinhAnh && hinhAnh?.assets && hinhAnh?.assets.length > 0) {
+        // Truy cập vào URI nếu tồn tại
+        formData.append('image', {
+          uri: hinhAnh?.assets[0]?.uri,
+          type: 'image/jpeg',
+          name: 'photo.jpg',
+        });
+      }
+
+      formData.append('status', 1);
+
+      try {
+        const response = await fetch(url, {
+          method: 'POST',
+          body: formData,
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            // Add any additional headers needed for authentication etc.
+          },
+        });
+        const data = await response.json();
+        Alert.alert('Thêm thành công');
+        setPassword('');
+        setUsername('');
+        setFullName('');
+        setEmail('');
+        setindex(response.json.length);
+        setPhoneNumber('');
+        setVisibleModalAdd(false);
+        //thêm thành công, gọi hàm getListEmployees để ud ds
+        getListEmployees();
+        setHinhAnh(null);
+      } catch (error) {
+        console.error('Upload failed:', error);
+      }
+    }
+  };
 
   //fetch danh sách nhân viên
   const getListEmployees = async () => {
@@ -54,38 +147,7 @@ const EmployeeManagementScreen = ({navigation}) => {
 
   //thêm mới nhân viên
   const handleAdd = () => {
-    if (fullName == '') {
-      setErrFullName('Không bỏ trống thông tin');
-    } else {
-      setErrFullName('');
-    }
-    if (username == '') {
-      setErrUsername('Không bỏ trống thông tin');
-    } else {
-      setErrUsername('');
-    }
-    if (password == '') {
-      setErrPassword('Không bỏ trống thông tin');
-    } else if (password.length <= 6) {
-      setErrPassword('Mật khẩu phải có từ 6 ký tự trở lên');
-    } else {
-      setErrPassword('');
-    }
-    if (email == '') {
-      setErrEmail('Không bỏ trống thông tin');
-    } else if (email.indexOf('@') == -1 || email.indexOf('.') == -1) {
-      setErrEmail('Email chưa đúng định dạng');
-    } else {
-      setErrEmail('');
-    }
-    const regexPhone = /^0\d{9}$/;
-    if (phoneNumber == '') {
-      setErrPhone('Không bỏ trống thông tin');
-    } else if (!regexPhone.test(phoneNumber)) {
-      setErrPhone('Số điện thoại chưa đúng định dạng');
-    } else {
-      setErrPhone('');
-    }
+    validate();
     if (
       errFullName == '' &&
       errEmail == '' &&
@@ -93,7 +155,6 @@ const EmployeeManagementScreen = ({navigation}) => {
       errUserName == '' &&
       errPhone == ''
     ) {
-      console.log(username, password);
       // Tạo đối tượng dữ liệu
       let objEmployee = {
         username: username,
@@ -134,6 +195,40 @@ const EmployeeManagementScreen = ({navigation}) => {
           console.error('Thêm không thành công:', error);
         });
     } else return;
+  };
+  const validate = () => {
+    if (fullName == '') {
+      setErrFullName('Không bỏ trống thông tin');
+    } else {
+      setErrFullName('');
+    }
+    if (username == '') {
+      setErrUsername('Không bỏ trống thông tin');
+    } else {
+      setErrUsername('');
+    }
+    if (password == '') {
+      setErrPassword('Không bỏ trống thông tin');
+    } else if (password.length <= 6) {
+      setErrPassword('Mật khẩu phải có từ 6 ký tự trở lên');
+    } else {
+      setErrPassword('');
+    }
+    if (email == '') {
+      setErrEmail('Không bỏ trống thông tin');
+    } else if (email.indexOf('@') == -1 || email.indexOf('.') == -1) {
+      setErrEmail('Email chưa đúng định dạng');
+    } else {
+      setErrEmail('');
+    }
+    const regexPhone = /^0\d{9}$/;
+    if (phoneNumber == '') {
+      setErrPhone('Không bỏ trống thông tin');
+    } else if (!regexPhone.test(phoneNumber)) {
+      setErrPhone('Số điện thoại chưa đúng định dạng');
+    } else {
+      setErrPhone('');
+    }
   };
 
   //item
@@ -220,6 +315,55 @@ const EmployeeManagementScreen = ({navigation}) => {
         <View style={styles.modalEdit}>
           <View style={styles.dialogEdit}>
             <Text style={styles.titleModal}>Thêm mới nhân viên</Text>
+            {/* // */}
+
+            {/* <Image
+              key={index}
+              source={{uri: uri}}
+              style={{width: 200, height: 200}}
+            /> */}
+
+            {typeof hinhAnh?.assets != 'undefined' ? (
+              hinhAnh?.assets.map((objImage, index) => {
+                return (
+                  <View key={index} style={{margin: 10, alignSelf: 'center'}}>
+                    <Image
+                      key={index}
+                      source={{uri: objImage.uri}}
+                      style={{width: 140, height: 140}}
+                    />
+                  </View>
+                );
+              })
+            ) : (
+              <View key={index} style={{margin: 10, alignSelf: 'center'}}>
+                <Image
+                  key={index}
+                  source={require('../img/add_pic.png')}
+                  style={{width: 140, height: 140}}
+                />
+              </View>
+            )}
+            {/* // */}
+
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                marginVertical: 10,
+              }}>
+              <TouchableOpacity onPress={chupAnh} style={styles.btnAddAnh}>
+                <Image source={require('../img/camera.png')} />
+                <Text style={{color: '#409087'}}> Camera</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={chonAnh} style={styles.btnAddAnh}>
+                <Image source={require('../img/upload.png')} />
+
+                <Text style={{color: '#409087'}}> Upload</Text>
+              </TouchableOpacity>
+            </View>
+
             <TextInput
               placeholder="Fullname"
               style={styles.textInput}
@@ -257,7 +401,7 @@ const EmployeeManagementScreen = ({navigation}) => {
             <Text style={styles.err}>{errPhone}</Text>
 
             <View style={styles.btnModal}>
-              <TouchableOpacity onPress={handleAdd} style={styles.btnThem}>
+              <TouchableOpacity onPress={uploadImage} style={styles.btnThem}>
                 <Text style={{color: 'white'}}>Thêm</Text>
               </TouchableOpacity>
               <TouchableOpacity
@@ -346,7 +490,7 @@ const styles = StyleSheet.create({
   err: {
     color: 'red',
     fontSize: 12,
-    marginBottom: 10,
+    marginBottom: 5,
     alignItems: 'flex-start',
   },
   btnThem: {
@@ -356,6 +500,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     height: 35,
     borderRadius: 15,
+  },
+  btnAddAnh: {
+    width: 100,
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 35,
+    borderRadius: 15,
+    borderWidth: 1,
+    borderColor: '#409087',
+    flexDirection: 'row',
   },
   titleModal: {
     fontSize: 20,

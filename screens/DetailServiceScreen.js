@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, Image } from 'react-native';
+import React, {useEffect, useState, StyleSheet} from 'react';
+import {View, Text, Image} from 'react-native';
 
 import BASE_URL from '../base/BASE_URL';
 const URL_services = `${BASE_URL}/services`;
 const URL_servicedetails = `${BASE_URL}/serviceDetails`;
 
-const DetailServiceScreen = ({ route }) => {
- const [obj, setobj] = useState({serviceName: '', description: '', image: ''});
- const [objD, setobjD] = useState({title: '', price: ''});
+const DetailServiceScreen = ({route}) => {
+  const [obj, setobj] = useState({serviceName: '', description: '', image: ''});
+  const [objD, setobjD] = useState({title: '', price: ''});
 
   useEffect(() => {
     fetch(URL_servicedetails + `/${route.params.idItemDetail}`)
@@ -29,7 +29,7 @@ const DetailServiceScreen = ({ route }) => {
 
   return (
     <View>
-      <Image source={{ uri: obj.image }} />
+      <Image source={{uri: obj.image}} />
       <Text>{obj.serviceName}</Text>
       {/* khong hiện text dịch vụ */}
       <Text>{obj.description} + kjjkjjhk</Text>
@@ -38,6 +38,6 @@ const DetailServiceScreen = ({ route }) => {
       <Text>{objD.status}+jnknk</Text>
     </View>
   );
-}
+};
 
 export default DetailServiceScreen;

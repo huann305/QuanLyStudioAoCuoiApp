@@ -6,10 +6,10 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import ButtonCustom from '../components/ButtonCustom';
 import {Modal} from 'react-native';
-import DropDownPicker from 'react-native-dropdown-picker';
+import {RadioGroup} from 'react-native-radio-buttons-group';
 
 const url = `${BASE_URL}/employees`;
 const DetailEmployeeScreen = ({navigation, route}) => {
@@ -20,19 +20,29 @@ const DetailEmployeeScreen = ({navigation, route}) => {
   const [visibleModalEdit, setVisibleModalEdit] = useState(false);
   const [status, setStatus] = useState(DetailEmployee.status);
 
-  //DropDown picker
-  const [open, setOpen] = useState(false);
-  const [items, setItems] = useState([
-    {label: 'Đang hoạt động', value: '1'},
-    {label: 'Đã nghỉ việc', value: '0'},
-  ]);
+  const radioButtons = useMemo(
+    () => [
+      {
+        id: '1',
+        label: 'Đang hoạt động',
+        value: 1,
+      },
+      {
+        id: '0',
+        label: 'Đã nghỉ việc',
+        value: 0,
+      },
+    ],
+    [],
+  );
 
-  //useEffect
+  const [selectedId, setSelectedId] = useState();
 
   //update
   const handleUpdate = () => {
-    //tạo sối tượn dữ liệu
+    //tạo sối tượng dữ liệu
     const _id = DetailEmployee._id;
+
     const objEmployee = {
       username: DetailEmployee.username,
       password: DetailEmployee.password,
@@ -43,7 +53,7 @@ const DetailEmployeeScreen = ({navigation, route}) => {
       note: DetailEmployee.note,
       role: DetailEmployee.role,
       image: DetailEmployee.image,
-      status: status,
+      status: selectedId == 0 ? 0 : 1,
     };
 
     let url_api = url + '/' + _id;
@@ -75,11 +85,16 @@ const DetailEmployeeScreen = ({navigation, route}) => {
         <Text style={styles.title}>Thông tin chi tiết</Text>
         <View></View>
       </View>
-      <Image
-        source={{uri: DetailEmployee.image}}
-        style={styles.img}
-        resizeMode="cover"
-      />
+      {DetailEmployee.image === '' ? (
+        <Image source={require('../img/avt.png')} style={styles.img} />
+      ) : (
+        <Image
+          source={{uri: DetailEmployee.image}}
+          style={styles.img}
+          resizeMode="cover"
+        />
+      )}
+
       <Text
         style={{
           color: 'black',
@@ -129,9 +144,13 @@ const DetailEmployeeScreen = ({navigation, route}) => {
         style={{marginHorizontal: 30, marginTop: 30}}
         onPress={() => {
           setVisibleModalEdit(true);
+
+          //
+          {
+            status === 0 ? setSelectedId('0') : setSelectedId('1');
+          }
         }}
       />
-
       {/* modal update */}
       <Modal
         animationType="slide"
@@ -148,29 +167,14 @@ const DetailEmployeeScreen = ({navigation, route}) => {
               }}>
               Cập nhật trạng thái
             </Text>
-            {/* /// */}
-            <View
-              style={{
-                alignItems: 'center',
-                justifyContent: 'center',
-                paddingHorizontal: 15,
-                paddingVertical: 10,
-                marginBottom: 30,
-                // height: 30,
-              }}>
-              <DropDownPicker
-                open={open} //trạng thái đóng mở
-                defaultValue={status} //giá trị ban đầu đc chọn
-                value={status}
-                items={items}
-                setOpen={setOpen}
-                setValue={setStatus}
-                setItems={setItems}
-                placeholder={''}
+            <View style={{height: 40}}>
+              <RadioGroup
+                radioButtons={radioButtons}
+                onPress={setSelectedId} //thay đổi khi chọn các radio
+                selectedId={selectedId} //trạng thái được chọn ban đầu
+                containerStyle={{alignItems: 'flex-start'}}
               />
             </View>
-            {/* <Text>{status}</Text> */}
-
             <View
               style={{
                 flexDirection: 'row',
@@ -220,6 +224,7 @@ const styles = StyleSheet.create({
     marginTop: 30,
     marginBottom: 10,
   },
+
   tt: {
     borderBottomWidth: 0.5,
     borderColor: 'gray',
