@@ -52,13 +52,13 @@ const CustomDrawer = props => {
             source={require('./img/image.png')}
           />
           <View>
-            <Text style={{color: '#fff', fontWeight: 'bold', fontSize: 20}}>
+            {/* <Text style={{color: '#fff', fontWeight: 'bold', fontSize: 20}}>
               {data.fullName == '' ? 'Chưa cập nhật tên' : data.fullName}
             </Text>
             <Text style={{color: '#D9D9D9'}}>
               {data.email == '' ? 'Chưa cập nhật email' : data.email}
             </Text>
-            <Text style={{color: '#D9D9D9'}}>{data.role}</Text>
+            <Text style={{color: '#D9D9D9'}}>{data.role}</Text> */}
           </View>
         </View>
         <DrawerItemList {...props} />

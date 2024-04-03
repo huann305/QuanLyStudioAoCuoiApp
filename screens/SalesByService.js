@@ -9,6 +9,7 @@ import TotalComponent from '../components/TotalComponent';
 
 import BASE_URL from '../base/BASE_URL';
 import { Image } from 'react-native-elements';
+import { FlatList } from 'react-native-gesture-handler';
 const URL_services = `${BASE_URL}/services`;
 
 const SalesByService = () => {
@@ -125,45 +126,17 @@ const SalesByService = () => {
       <Image style={{ width: 20, height: 20 }} source={require('../img/calendar.png')} />
     </View>   
     {/* Hàng 3 */}
-    <View style={[styles.roww, { justifyContent: 'space-between', alignItems: 'center' }]}>
-      <View style={{ width: 150 }}>
-        <DropDownPicker
-          open={open}
-          value={value}
-          items={items}
-          setOpen={setOpen}
-          setValue={setValue}
-          setItems={setItems}
-          theme="DARK"
-          multiple={false}
-          mode="BADGE"
-          maxHeight={400}
-          renderBadge={({ item, index }) => (
-            <View style={{ backgroundColor: '#007bff', padding: 8, borderRadius: 15 }}>
-              <Text style={{ color: '#fff' }}>{item.label}</Text>
-            </View>
-          )}
-        />
-      </View>                     
+                        
       <ButtonCustom style={styles.butto} title='Thống kê' onPress={() => {fetchTotalRevenue(),
       handleCalculateRevenue()}} />
+  <FlatList 
+  data={dataTow}
+  horizontal={false}
+  renderItem={({item}) =>{
+    <View>
+      
     </View>
-
-    <TotalComponent
-      title='Tổng doanh số'
-      total= {totalRevenue}
-      uri_img='https://banner2.cleanpng.com/20180715/ffu/kisspng-computer-icons-wallet-geld-icon-5b4b9f6be40655.675625431531682667934.jpg'
-    />
-    <TotalComponent
-      title='Doanh số theo dịch vụ'
-      total={totalRevenueDichVu}
-      uri_img='https://banner2.cleanpng.com/20180715/ffu/kisspng-computer-icons-wallet-geld-icon-5b4b9f6be40655.675625431531682667934.jpg'
-    />
-    <TotalComponent
-      title='Dịch vụ được thuê nhiều nhất'
-      total='dán kq vào đây'
-      uri_img='https://banner2.cleanpng.com/20180715/ffu/kisspng-computer-icons-wallet-geld-icon-5b4b9f6be40655.675625431531682667934.jpg'
-    />
+  }}/>
   </View>
   );
 }

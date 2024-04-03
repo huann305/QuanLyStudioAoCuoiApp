@@ -8,7 +8,7 @@ import ButtonCustom from '../components/ButtonCustom';
 const UpdateInforScreen = () => {
   const data = useContext(DataContext)
   console.log(data)
-  const [fullName, setFullName] = useState(data?.fullName ? data.fullName : "")
+  // const [fullName, setFullName] = useState(data?.fullName ? data.fullName : "")
   const [email, setEmail] = useState(data?.email ? data.email : "")
   const [phoneNumber, setPhoneNumber] = useState(data?.phoneNumber ? data.phoneNumber : "")
   const [address, setAddress] = useState(data?.address ? data.address : "")
