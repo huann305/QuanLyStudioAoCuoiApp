@@ -20,15 +20,16 @@ const login = (username, password, navigation) => {
     }),
   })
     .then(res => {
-      return res.json();
+      if(res.status === 200) {
+        return res.json();
+      }
+      else {
+        Alert.alert('Error', 'Username or password not match');
+        throw new Error('Username or password not match');
+      }
     })
     .then(data => {
-      // console.log(data)
-      if (data) {
         navigation.replace('Home', data);
-      } else {
-        Alert.alert('Error', 'Username or password not match');
-      }
     })
     .catch(err => console.log(err));
 };
