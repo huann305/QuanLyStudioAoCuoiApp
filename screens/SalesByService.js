@@ -62,7 +62,7 @@ const SalesByService = () => {
     return (
       <View style={styles.cen}>
         <View style={{ flexDirection: 'column', width: '50%' }}>
-          <Text style={styles.leftText}>idService: {item.idService}</Text>
+          <Text style={styles.leftText}>Service Name : {item.serviceName}</Text>
           <Text style={styles.leftText}>Count: {item.count}</Text>
         </View>
         <View style={{ flexDirection: 'column', width: '50%' }}>
