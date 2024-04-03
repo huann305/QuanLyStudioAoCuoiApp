@@ -49,7 +49,7 @@ const CustomDrawer = props => {
               width: 100,
               borderRadius: 500,
             }}
-            source={require('./img/image.png')}
+            source={{uri: data.image}}
           />
           <View>
             <Text style={{color: '#fff', fontWeight: 'bold', fontSize: 20}}>

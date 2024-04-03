@@ -45,7 +45,6 @@ const ServiceManagementScreen = ({ navigation }) => {
       .then(response => response.json())
       .then(json => setServices(json))
       .catch(error => {
-        console.error(error);
       });
   }, []);
 
@@ -54,7 +53,6 @@ const ServiceManagementScreen = ({ navigation }) => {
       .then(response => response.json())
       .then(json => setDetailService(json))
       .catch(error => {
-        console.error(error);
       });
   }, []);
 
@@ -83,9 +81,7 @@ const ServiceManagementScreen = ({ navigation }) => {
     }).then(response => {
       if (response.ok) {
         detailServiceData();
-        console.log("data" + response.json())
       } else {
-        console.log('');
       }
     }).then(() => {
       setUpdateDataServiceD({
@@ -95,7 +91,6 @@ const ServiceManagementScreen = ({ navigation }) => {
       })
       detailServiceData()
     }).catch(error => {
-      console.error(error);
     })
   };
 
@@ -104,30 +99,35 @@ const ServiceManagementScreen = ({ navigation }) => {
       serviceName: addDataService.serviceName,
       description: addDataService.serviceDescription,
     };
-    
+
     const formData = new FormData()
-    formData.append('image', {
-      uri: hinhAnh.assets[0].uri,
-      type: hinhAnh.assets[0].type,
-      name: hinhAnh.assets[0].fileName
-    })
+    // formData.append('image', {
+    //   uri: hinhAnh.assets[0].uri,
+    //   type: 'image/jpeg',
+    //   name: 'photo.jpg'
+    // })
     formData.append('serviceName', objService.serviceName)
     formData.append('description', objService.description)
+    console.log("first 1")
     fetch(URL_services, {
       method: 'POST',
       headers: {
-        Accept: 'application/json',
-        'Content-Type': 'multipart/form-data'
+        'Content-Type': 'multipart/form-data',
+        Accept: 'application/json'
       },
       body: formData,
     })
       .then(response => {
         if (response.ok) {
           servicesData();
-          console.log("data" + response.json())
+          console.log("first 2")
         } else {
-          console.log('');
+          console.log("first 3")
         }
+      }).catch(e => {
+        console.log(e)
+      }).finally(() => {
+        resetData()
       })
   };
 
@@ -138,8 +138,8 @@ const ServiceManagementScreen = ({ navigation }) => {
     const formData = new FormData();
     formData.append('image', {
       uri: hinhAnh.assets[0].uri,
-      type: hinhAnh.assets[0].type,
-      name: hinhAnh.assets[0].fileName
+      type: 'image/jpeg',
+      name: 'photo.jpg'
     })
     formData.append('serviceName', addDataService.serviceName)
     formData.append('description', addDataService.serviceDescription)
@@ -153,18 +153,16 @@ const ServiceManagementScreen = ({ navigation }) => {
     }).then(response => {
       if (response.ok) {
         servicesData();
-        console.log("data" + response.json())
       } else {
-        console.log('');
       }
     }).catch(error => {
-      console.error(error);
+    }).finally(() => {
+      resetData()
     })
   }
 
   // thêm chi tiết
   const serverAddDetail = useCallback(() => {
-    console.log(idItemD + 'idItemD');
     const newDetailAdd = {
       idService: idItemD,
       title: addDataServiceD.title,
@@ -264,7 +262,7 @@ const ServiceManagementScreen = ({ navigation }) => {
     )
   }
 
-  const resetData = ()=>{
+  const resetData = () => {
     sethinhAnh(null);
     setmodalUpdateService(false);
     setUpdateDataServiceD({
@@ -334,7 +332,6 @@ const ServiceManagementScreen = ({ navigation }) => {
               onChangeText={(text) => setaddDataService(prevData => ({ ...prevData, serviceDescription: text }))} />
             <ButtonCustom style={{ marginTop: 10 }} onPress={() => {
               ServiceAdd();
-              resetData()
             }} title={'Thêm'} />
             <ButtonCustom style={{ marginTop: 10 }} onPress={() => {
               setModalVisibleAdd(false);
@@ -378,7 +375,6 @@ const ServiceManagementScreen = ({ navigation }) => {
               onChangeText={(text) => setaddDataService(prevData => ({ ...prevData, serviceDescription: text }))} />
             <ButtonCustom style={{ marginTop: 10 }} onPress={() => {
               handleUpdateService()
-              resetData()
             }} title={'Cập nhật'} />
             <ButtonCustom style={{ marginTop: 10 }} onPress={() => {
               setmodalUpdateService(false);

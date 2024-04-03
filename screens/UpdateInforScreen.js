@@ -6,11 +6,11 @@ import TextInputCus from '../components/TextInputCustom';
 import ButtonCustom from '../components/ButtonCustom';
 import * as ImagePicker from 'react-native-image-picker';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import BASE_URL from '../base/BASE_URL';
 
 const UpdateInforScreen = () => {
   const [hinhAnh, setHinhAnh] = useState(null)
   const data = useContext(DataContext)
-  console.log(data)
   const [fullName, setFullName] = useState(data?.fullName ? data.fullName : "")
   const [email, setEmail] = useState(data?.email ? data.email : "")
   const [phoneNumber, setPhoneNumber] = useState(data?.phoneNumber ? data.phoneNumber : "")
@@ -28,7 +28,7 @@ const UpdateInforScreen = () => {
     <View style={{ flex: 1, alignItems: 'center', padding: 20 }}>
       <View>
         <TouchableOpacity onPress={chonAnh}>
-          <Text>Chọn ảnh nè</Text>
+          <Text>Chọn ảnh</Text>
         </TouchableOpacity>
         {
           (typeof (hinhAnh?.assets) != 'undefined') ?
@@ -85,7 +85,7 @@ const UpdateInforScreen = () => {
               name: 'photo.jpg'
             })
             
-            fetch(`http://10.0.2.2:3000/api/employees/${data._id}`, {
+            fetch(`${BASE_URL}/employees/${data._id}`, {
               method: 'PUT',
               headers: {
                 'Content-Type': 'multipart/form-data',
@@ -103,7 +103,7 @@ const UpdateInforScreen = () => {
                   console.log(data)
                   Alert.alert('Cập nhật thành công')
                 } else {
-                  Alert.alert('Cập nhật thất bại', 'Email đã tồn tại')
+                  Alert.alert('Cập nhật thất bại')
                 }
               })
               .catch((err) => {
