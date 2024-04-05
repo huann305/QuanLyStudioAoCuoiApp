@@ -117,21 +117,21 @@ function MyDrawer({ route }) {
           component={TaskManagementScreen}
         />
 
-        <Drawer.Screen
+        {/* <Drawer.Screen
           name="TotalSalesScreen"
           options={{ title: 'Tổng doanh số' }}
           component={TotalSalesScreen}
-        />
+        /> */}
         <Drawer.Screen
           name="SalesByService"
           options={{ title: 'Doanh số theo dịch vụ' }}
           component={SalesByService}
         />
-        <Drawer.Screen
+        {/* <Drawer.Screen
           name="MostServiceScreen"
           options={{ title: 'Dịch vụ được thuê nhiều nhất' }}
           component={MostServiceScreen}
-        />
+        /> */}
         <Drawer.Screen
           name="UpdateInforScreen"
           options={{ title: 'Cập nhật thông tin' }}
@@ -151,7 +151,7 @@ const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="Login"
+        initialRouteName="WelcomeScreen"
         screenOptions={{ headerShown: false }}>
         <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} />
         <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
