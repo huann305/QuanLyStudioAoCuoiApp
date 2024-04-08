@@ -6,22 +6,23 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import BASE_URL from '../base/BASE_URL';
-import {Image} from 'react-native-elements';
+import { Image } from 'react-native-elements';
+import { useFocusEffect } from '@react-navigation/native';
 
 const url = `${BASE_URL}/bills`;
 const urlE = `${BASE_URL}/employees`;
 const urlC = `${BASE_URL}/customers`;
 
-const BillManagementScreen = ({navigation}) => {
+const BillManagementScreen = ({ navigation }) => {
   const [data, setData] = useState([]);
   const [index, setIndex] = useState(0);
   const [visibleModalDelete, setVisibleModalDelete] = useState(false);
   const [idDel, setidDel] = useState('');
 
   //lấy danh sách hóa đơn
-  const getLisTBills = async () => {
+  const getLisTBills = useCallback(async () => {
     try {
       const res = await fetch(url);
       const result = await res.json();
@@ -30,8 +31,29 @@ const BillManagementScreen = ({navigation}) => {
     } catch (err) {
       console.error('Error fetching data: ' + err);
     }
-  };
+  }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      console.log('Màn hình được tập trung');
+      
+      getLisTBills()
+      
+      return () => {
+        // Hàm cleanup (nếu cần)
+      };
+    }, [])
+  );
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('blur', () => {
+      console.log('Màn hình mất tập trung');
+      
+      // Thực hiện các hành động bạn muốn khi màn hình mất tập trung
+      // Ví dụ: Làm sạch trạng thái, huỷ bỏ các request không cần thiết, vv.
+      
+    });
 
+    return unsubscribe;
+  }, [navigation]);
   useEffect(() => {
     getLisTBills();
   }, []);
@@ -55,7 +77,7 @@ const BillManagementScreen = ({navigation}) => {
       });
   };
 
-  const ItemBill = ({item}) => {
+  const ItemBill = ({ item }) => {
     const [nameE, setNameE] = useState('');
     const [nameC, setNameC] = useState('');
     // lấy tên nhân viên theo id
@@ -87,7 +109,7 @@ const BillManagementScreen = ({navigation}) => {
 
     return (
       <View style={styles.itemBill}>
-        <View style={{flex: 1}}>
+        <View style={{ flex: 1 }}>
           <View style={styles.rowContent}>
             <Text style={styles.title}>Mã HĐ: </Text>
             <Text> {item._id}</Text>
@@ -96,7 +118,7 @@ const BillManagementScreen = ({navigation}) => {
             <Text style={styles.title}>Tên NV: </Text>
             <Text>{nameE}</Text>
           </View>
-          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
             <View>
               <View style={styles.rowContent}>
                 <Text style={styles.title}>Tên khách hàng: </Text>
@@ -117,17 +139,17 @@ const BillManagementScreen = ({navigation}) => {
               }}>
               <Image
                 source={require('../img/delete.png')}
-                style={{width: 30, height: 30}}
+                style={{ width: 30, height: 30 }}
               />
             </TouchableOpacity>
           </View>
 
-          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
             <View style={[styles.rowContent, ,]}>
-              <Text style={[styles.title, {color: '#409087', fontSize: 18}]}>
+              <Text style={[styles.title, { color: '#409087', fontSize: 18 }]}>
                 Tổng tiền:{' '}
               </Text>
-              <Text style={[styles.title, {color: '#409087', fontSize: 18}]}>
+              <Text style={[styles.title, { color: '#409087', fontSize: 18 }]}>
                 {item.totalPrice}
               </Text>
             </View>
@@ -135,9 +157,9 @@ const BillManagementScreen = ({navigation}) => {
             <TouchableOpacity
               style={styles.btn}
               onPress={() => {
-                navigation.navigate('DetailBill', {item});
+                navigation.navigate('DetailBill', { item });
               }}>
-              <Text style={{color: 'white', fontWeight: '500'}}>Detail</Text>
+              <Text style={{ color: 'white', fontWeight: '500' }}>Detail</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -148,18 +170,17 @@ const BillManagementScreen = ({navigation}) => {
   return (
     <View>
       <FlatList
-        data={data}
-        keyExtractor={item => item._id}
-        extraData={index}
-        renderItem={({item}) => {
-          return <ItemBill item={item} />;
-        }}
-        // nestedScrollEnabled={false}
-        // scrollEnabled={false}
-      />
+      data={data}
+      keyExtractor={item => item._id}
+      renderItem={({ item }) => {
+        return <ItemBill item={item} />;
+      }}
+    // nestedScrollEnabled={false}
+    // scrollEnabled={false}
+    />
 
       <Modal
-        animationType="slide"
+        animationType="fade"
         transparent={true}
         visible={visibleModalDelete}>
         <View style={styles.modal}>
@@ -183,7 +204,7 @@ const BillManagementScreen = ({navigation}) => {
                 alignItems: 'center',
               }}>
               <TouchableOpacity
-                style={{marginLeft: 30}}
+                style={{ marginLeft: 30 }}
                 onPress={() => {
                   setVisibleModalDelete(false);
                 }}>
@@ -229,7 +250,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     fontSize: 15,
   },
-  rowContent: {flexDirection: 'row', alignItems: 'center'},
+  rowContent: { flexDirection: 'row', alignItems: 'center' },
   modal: {
     backgroundColor: 'rgba( 105, 105, 105, 0.5 )',
     height: '100%',

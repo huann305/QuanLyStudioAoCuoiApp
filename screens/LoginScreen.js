@@ -16,22 +16,23 @@ const login = (username, password, navigation) => {
     },
     body: JSON.stringify({
       username: username,
-      password: password,
-    }),
+      password: password
+    })
+  }).then(res => {
+    if(res.status == 200){
+      return res.json()
+    }
+    return
   })
-    .then(res => {
-      if(res.status === 200) {
-        return res.json();
+    .then(data => {
+      if (data) {
+        navigation.replace('Home', data)
       }
       else {
         Alert.alert('Error', 'Username or password not match');
         throw new Error('Username or password not match');
       }
     })
-    .then(data => {
-        navigation.replace('Home', data);
-    })
-    .catch(err => console.log(err));
 };
 
 const LoginScreen = ({navigation}) => {

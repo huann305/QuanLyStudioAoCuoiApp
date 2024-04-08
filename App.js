@@ -32,7 +32,6 @@ const Drawer = createDrawerNavigator();
 
 const CustomDrawer = props => {
   const data = useContext(DataContext);
-  console.log(data);
   return (
     <View style={{ flex: 1 }}>
       <DrawerContentScrollView {...props}>
@@ -51,7 +50,7 @@ const CustomDrawer = props => {
               width: 100,
               borderRadius: 500,
             }}
-            source={require('./img/image.png')}
+            source={{uri: data.image}}
           />
           <View>
             <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 20 }}>
