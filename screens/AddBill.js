@@ -31,6 +31,8 @@ const AddBill = () => {
   const [errName, setErrName] = useState(null);
   const [errPhoneNumber, setErrPhoneNumber] = useState(null);
   const [errAddress, setErrAddress] = useState(null);
+  const [note, setNote] = useState('');
+  const [errNote, setErrNote] = useState('');
   const [data_service, setData_service] = useState([]);
   const [index, setIndex] = useState(0);
   const [data_serviceChoosed, setData_serviceChoosed] = useState([]);
@@ -194,6 +196,7 @@ const AddBill = () => {
     } else {
       setErrAddress('');
     }
+
     if (errName == '' && errPhoneNumber == '' && errAddress == '') {
       //thực thiện thanh toán
       //1.Tạo nhân viên
@@ -219,6 +222,7 @@ const AddBill = () => {
             setAddress('');
             setCustomerName('');
             setPhoneNumber('');
+
             console.log('Thêm khách hàng thành công');
             return res.json();
           } else {
@@ -271,6 +275,7 @@ const AddBill = () => {
           idDetailService: item._id,
           price: item.price,
           date: date,
+          note: note,
         };
         fetch(urlDetailBill, {
           method: 'POST',
@@ -285,6 +290,7 @@ const AddBill = () => {
               console.log('Thêm hóa đơn chi tiết thành công');
               data_serviceChoosed.shift();
               setTotalPrice(0);
+              setNote('');
             } else {
               throw new Error('Thêm không thành công');
             }
@@ -331,6 +337,13 @@ const AddBill = () => {
         </View>
 
         <Text style={styles.err}>{errAddress}</Text>
+      </View>
+      <View>
+        <View style={styles.txtIp}>
+          <TextInput placeholder="Note" onChangeText={setNote} value={note} />
+        </View>
+
+        <Text style={styles.err}>{errNote}</Text>
       </View>
       <Text style={styles.title}>Dịch vụ chọn thuê</Text>
       <FlatList

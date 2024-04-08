@@ -32,9 +32,12 @@ const BillManagementScreen = ({navigation}) => {
     }
   };
 
-  useEffect(() => {
-    getLisTBills();
-  }, []);
+  React.useEffect(() => {
+    const loadData = navigation.addListener('focus', () => {
+      getLisTBills();
+    });
+    return loadData;
+  }, [navigation]);
 
   const handleDelete = async id => {
     await fetch(`${url}/` + id, {

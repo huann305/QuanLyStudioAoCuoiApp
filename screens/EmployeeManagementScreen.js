@@ -13,7 +13,6 @@ import React, {useCallback, useEffect, useState} from 'react';
 import BASE_URL from '../base/BASE_URL';
 import {Modal} from 'react-native';
 import * as ImagePicker from 'react-native-image-picker';
-import {Button} from 'react-native-elements';
 
 //url
 const url = `${BASE_URL}/employees`;
@@ -97,6 +96,8 @@ const EmployeeManagementScreen = ({navigation}) => {
       }
 
       formData.append('status', 1);
+      //nghề
+      formData.append('');
 
       try {
         const response = await fetch(url, {
@@ -166,6 +167,7 @@ const EmployeeManagementScreen = ({navigation}) => {
         role: 'Đang cập nhật',
         image: '',
         status: '1',
+        // nghề nghiệp
       };
       fetch(url, {
         method: 'POST',
@@ -184,6 +186,8 @@ const EmployeeManagementScreen = ({navigation}) => {
             setEmail('');
             setindex(res.json.length);
             setPhoneNumber('');
+
+            // set lại nghề nghiệp
             setVisibleModalAdd(false);
             //thêm thành công, gọi hàm getListEmployees để ud ds
             getListEmployees();
@@ -399,6 +403,8 @@ const EmployeeManagementScreen = ({navigation}) => {
               onChangeText={setPhoneNumber}
             />
             <Text style={styles.err}>{errPhone}</Text>
+
+            {/* 1. chọn nghề nghiệp */}
 
             <View style={styles.btnModal}>
               <TouchableOpacity onPress={uploadImage} style={styles.btnThem}>
