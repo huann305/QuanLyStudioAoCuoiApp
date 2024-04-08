@@ -19,10 +19,12 @@ const login = (username, password, navigation) => {
       password: password
     })
   }).then(res => {
-    return res.json()
+    if(res.status == 200){
+      return res.json()
+    }
+    return
   })
     .then(data => {
-      console.log(data)
       if (data) {
         navigation.replace('Home', data)
       } else {

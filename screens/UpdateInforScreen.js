@@ -58,7 +58,7 @@ const UpdateInforScreen = () => {
         <TextInputCus
           defaultValue={fullName}
           onChangeText={setFullName}
-          lable={'Full name'} />
+          lable={'Họ tên'} />
         <TextInputCus
           defaultValue={email}
           onChangeText={setEmail}
@@ -66,11 +66,11 @@ const UpdateInforScreen = () => {
         <TextInputCus
           defaultValue={phoneNumber}
           onChangeText={setPhoneNumber}
-          lable={'Phone number'} />
+          lable={'Số điện thoại'} />
         <TextInputCus
           defaultValue={address}
           onChangeText={setAddress}
-          lable={'Address'} />
+          lable={'Địa chỉ'} />
         <ButtonCustom
           onPress={() => {
             const formData = new FormData()
