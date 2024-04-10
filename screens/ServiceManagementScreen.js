@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import React, { useState, useEffect, useCallback } from 'react';
+=======
+import React, {useState, useMemo, useEffect, useCallback} from 'react';
+>>>>>>> origin/HoangYen
 import {
   View,
   Text,
@@ -11,6 +15,7 @@ import {
   Pressable,
   Alert,
 } from 'react-native';
+import RadioGroup, {RadioButtonProps} from 'react-native-radio-buttons-group';
 import BASE_URL from '../base/BASE_URL';
 const URL_services = `${BASE_URL}/services`;
 const URL_servicedetails = `${BASE_URL}/serviceDetails`;
@@ -40,8 +45,8 @@ const ServiceManagementScreen = ({ navigation }) => {
 
   const [updateDataServiceD, setUpdateDataServiceD] = useState({
     title: '',
-    price: '',
-    status: '',
+    price: ''
+   
   });
   const [addDataService, setaddDataService] = useState({
     serviceName: '',
@@ -58,6 +63,20 @@ const ServiceManagementScreen = ({ navigation }) => {
       .catch(error => {
       });
   }, []);
+
+  const radioButtons = useMemo(() => ([
+    {
+        id: '1', 
+        label: 'Đang hoạt động',
+        value: 'Đang hoạt động'
+    },
+    {
+        id: '2',
+        label: 'Tạm dừng',
+        value: 'Tạm dừng'
+    }
+]), []);
+const [selectedId, setSelectedId] = useState();
 
   const detailServiceData = useCallback(() => {
     fetch(URL_servicedetails)
@@ -80,7 +99,7 @@ const ServiceManagementScreen = ({ navigation }) => {
     const objDetail = {
       title: updateDataServiceD.title,
       price: updateDataServiceD.price,
-      status: updateDataServiceD.status,
+      status: selectedId == '1'? '1': '2',
     };
     fetch(URL_servicedetails + `/${idItem}`, {
       method: 'PUT',
@@ -114,8 +133,7 @@ const ServiceManagementScreen = ({ navigation }) => {
       .then(() => {
         setUpdateDataServiceD({
           title: '',
-          price: '',
-          status: '',
+          price: ''
         });
         detailServiceData();
       })
@@ -419,8 +437,7 @@ const ServiceManagementScreen = ({ navigation }) => {
     setmodalUpdateService(false);
     setUpdateDataServiceD({
       title: '',
-      price: '',
-      status: '',
+      price: ''
     });
     setaddDataService({
       serviceName: '',
@@ -431,8 +448,7 @@ const ServiceManagementScreen = ({ navigation }) => {
     setModalVisibleAddD(false);
     setaddDataServiceD({
       title: '',
-      price: '',
-      status: '',
+      price: ''
     });
   };
 
@@ -670,14 +686,20 @@ const ServiceManagementScreen = ({ navigation }) => {
                 setUpdateDataServiceD(prevData => ({ ...prevData, price: text }))
               }
             />
-            <TextInputCus
+            {/* <TextInputCus
               placeholder="Trạng thái"
               lable="Trạng thái"
               defaultValue={updateDataServiceD.status}
               onChangeText={text =>
                 setUpdateDataServiceD(prevData => ({ ...prevData, status: text }))
               }
-            />
+            /> */}
+              <RadioGroup  
+            radioButtons={radioButtons} 
+            onPress={setSelectedId}
+            selectedId={selectedId}
+            containerStyle={{ flexDirection: 'row', alignItems: 'center' }}
+        />
             <ButtonCustom
               style={{ marginTop: 10 }}
               onPress={() => {

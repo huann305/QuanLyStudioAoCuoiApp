@@ -152,7 +152,11 @@ const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
+<<<<<<< HEAD
         initialRouteName="WelcomeScreen"
+=======
+        initialRouteName="ServiceManagementScreen"
+>>>>>>> origin/HoangYen
         screenOptions={{ headerShown: false }}>
         <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} />
         <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
