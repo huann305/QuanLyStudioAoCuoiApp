@@ -52,11 +52,13 @@ const BillManagementScreen = ({ navigation }) => {
       
     });
 
+
     return unsubscribe;
   }, [navigation]);
   useEffect(() => {
     getLisTBills();
   }, []);
+
 
   const handleDelete = async id => {
     await fetch(`${url}/` + id, {

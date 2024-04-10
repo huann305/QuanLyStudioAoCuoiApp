@@ -1,3 +1,4 @@
+
 import { Alert, FlatList, Modal, StyleSheet, Text, View } from 'react-native'
 import React, { useCallback, useEffect, useState } from 'react'
 import BASE_URL from '../base/BASE_URL';
@@ -136,10 +137,11 @@ const TaskManagementScreen = ({ navigation }) => {
           </View>
         </View>
       </Modal>
+
     </View>
-  )
-}
+  );
+};
 
-export default TaskManagementScreen
+export default TaskManagementScreen;
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({});
