@@ -130,6 +130,12 @@ const AddBill = () => {
             },
             styles.vien,
           ]}>
+          <View style={{flex: 3}}>
+            <Text>{item.title}</Text>
+          </View>
+          <View style={{flex: 2.5}}>
+            <Text>{item.price}</Text>
+          </View>
           <TouchableOpacity
             style={{flex: 1.2}}
             onPress={() => {
@@ -138,12 +144,6 @@ const AddBill = () => {
             }}>
             <Text style={{fontSize: 16, fontWeight: 'bold'}}>Thêm</Text>
           </TouchableOpacity>
-          <View style={{flex: 3}}>
-            <Text>{item.title}</Text>
-          </View>
-          <View style={{flex: 2.5}}>
-            <Text>{item.price}</Text>
-          </View>
         </View>
       );
     };
@@ -163,16 +163,9 @@ const AddBill = () => {
             {item.serviceName}
           </Text>
         </View>
-        <FlatList
-          data={data_detailService}
-          keyExtractor={item => item._id}
-          extraData={index}
-          renderItem={({item}) => {
-            return <ItemDetailSer item={item} />;
-          }}
-          nestedScrollEnabled={false}
-          scrollEnabled={false}
-        />
+        {data_detailService.map(item => (
+          <ItemDetailSer item={item} key={item._id + Math.random()} />
+        ))}
       </View>
     );
   };

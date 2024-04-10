@@ -28,15 +28,16 @@ import DetailServiceScreen from './screens/DetailServiceScreen';
 import DetailEmployeeScreen from './screens/DetailEmployeeScreen';
 import AddBill from './screens/AddBill';
 import DetailBill from './screens/DetailBill';
+import EmployeeListScreen from './screens/EmployeeListScreen';
+import EmployeeAddScreen from './screens/EmployeeAddScreen';
 const Drawer = createDrawerNavigator();
 
 const CustomDrawer = props => {
   const data = useContext(DataContext);
-  console.log(data);
   return (
     <View style={{ flex: 1 }}>
       <DrawerContentScrollView {...props}>
-        <View
+        {/* <View
           style={{
             height: 150,
             justifyContent: 'center',
@@ -51,7 +52,7 @@ const CustomDrawer = props => {
               width: 100,
               borderRadius: 500,
             }}
-            source={require('./img/image.png')}
+            source={{uri: data.image}}
           />
           <View>
             <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 20 }}>
@@ -62,7 +63,7 @@ const CustomDrawer = props => {
             </Text>
             <Text style={{ color: '#D9D9D9' }}>{data.role}</Text>
           </View>
-        </View>
+        </View> */}
         <DrawerItemList {...props} />
       </DrawerContentScrollView>
       <TouchableOpacity
@@ -80,7 +81,7 @@ function MyDrawer({ route }) {
   return (
     <DataContext.Provider value={route.params}>
       <Drawer.Navigator
-        initialRouteName="AddBill"
+        initialRouteName="TaskManagementScreen"
         screenOptions={{
           headerStyle: {
             backgroundColor: 'transparent',
@@ -117,21 +118,21 @@ function MyDrawer({ route }) {
           component={TaskManagementScreen}
         />
 
-        <Drawer.Screen
+        {/* <Drawer.Screen
           name="TotalSalesScreen"
           options={{ title: 'Tổng doanh số' }}
           component={TotalSalesScreen}
-        />
+        /> */}
         <Drawer.Screen
           name="SalesByService"
           options={{ title: 'Doanh số theo dịch vụ' }}
           component={SalesByService}
         />
-        <Drawer.Screen
+        {/* <Drawer.Screen
           name="MostServiceScreen"
           options={{ title: 'Dịch vụ được thuê nhiều nhất' }}
           component={MostServiceScreen}
-        />
+        /> */}
         <Drawer.Screen
           name="UpdateInforScreen"
           options={{ title: 'Cập nhật thông tin' }}
@@ -155,6 +156,8 @@ const App = () => {
         screenOptions={{ headerShown: false }}>
         <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} />
         <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
+        <Stack.Screen name="EmployeeList" component={EmployeeListScreen} />
+        <Stack.Screen name="AddEmployee" component={EmployeeAddScreen} />
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Home" component={MyDrawer} />
 
