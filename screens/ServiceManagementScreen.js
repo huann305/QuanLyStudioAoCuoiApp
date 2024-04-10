@@ -160,7 +160,7 @@ const ServiceManagementScreen = ({ navigation }) => {
     //call update service
     const url = URL_services + `/${idItemD}`;
     const formData = new FormData();
-    if(hinhAnh !== null){
+    if (hinhAnh !== null) {
       formData.append('image', {
         uri: hinhAnh.assets[0].uri,
         type: hinhAnh.assets[0].type,
@@ -229,9 +229,7 @@ const ServiceManagementScreen = ({ navigation }) => {
       <View
         style={{
           flex: 1,
-          flexDirection: 'column',
-          margin: 10,
-          marginHorizontal: 40,
+          flexDirection: 'column', marginHorizontal: 10
         }}>
         <View style={{ marginTop: 10 }}>
           <View style={{ backgroundColor: 'orange', padding: 8 }}>
@@ -312,24 +310,31 @@ const ServiceManagementScreen = ({ navigation }) => {
           <View style={{ flexDirection: 'row', borderBottomWidth: 1, zIndex: 0 }}>
             <Text
               style={[
-                { flex: 1, fontSize: 15, fontWeight: 'bold', color: 'black' },
+                { flex: 2, fontSize: 15, fontWeight: 'bold', color: 'black' },
                 styles.star,
               ]}>
               Địa điểm
             </Text>
             <Text
               style={[
-                { flex: 1, fontSize: 15, fontWeight: 'bold', color: 'black' },
+                { flex: 2, fontSize: 15, fontWeight: 'bold', color: 'black' },
                 styles.star,
               ]}>
               Giá
             </Text>
             <Text
               style={[
-                { flex: 1, fontSize: 15, fontWeight: 'bold', color: 'black' },
+                { flex: 2, fontSize: 15, fontWeight: 'bold', color: 'black' },
                 styles.star,
               ]}>
               Trạng thái
+            </Text>
+            <Text
+              style={[
+                { flex: 1, fontSize: 15, fontWeight: 'bold', color: 'black' },
+                styles.star,
+              ]}>
+
             </Text>
           </View>
           {detailService &&
@@ -348,16 +353,11 @@ const ServiceManagementScreen = ({ navigation }) => {
                     },
                   ]}>
                   <TouchableOpacity
-                    onPress={() => {
-                      setModalVisibleUpdate(true);
-                      idItem = detailItem._id;
-                      setUpdateDataServiceD(detailItem);
-                    }}
                     style={{ flexDirection: 'row' }}>
                     <Text
                       style={[
                         {
-                          flex: 1,
+                          flex: 2,
                           fontSize: 15,
                           fontWeight: 'bold',
                           color: 'black',
@@ -381,7 +381,7 @@ const ServiceManagementScreen = ({ navigation }) => {
                     <Text
                       style={[
                         {
-                          flex: 1,
+                          flex: 2,
                           fontSize: 15,
                           fontWeight: 'bold',
                           color: 'black',
@@ -390,6 +390,22 @@ const ServiceManagementScreen = ({ navigation }) => {
                       ]}>
                       {detailItem.status}
                     </Text>
+                    <ButtonCustom
+                      onPress={() => {
+                        setModalVisibleUpdate(true);
+                        idItem = detailItem._id;
+                        setUpdateDataServiceD(detailItem);
+                      }}
+                      title="Cập nhật"
+                      style={[
+                        {
+                          flex: 1,
+                          fontSize: 15,
+                          fontWeight: 'bold',
+                          color: 'black',
+                        },
+                        styles.star,
+                      ]} />
                   </TouchableOpacity>
                 </View>
               ))}

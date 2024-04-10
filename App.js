@@ -28,6 +28,8 @@ import DetailServiceScreen from './screens/DetailServiceScreen';
 import DetailEmployeeScreen from './screens/DetailEmployeeScreen';
 import AddBill from './screens/AddBill';
 import DetailBill from './screens/DetailBill';
+import EmployeeListScreen from './screens/EmployeeListScreen';
+import EmployeeAddScreen from './screens/EmployeeAddScreen';
 const Drawer = createDrawerNavigator();
 
 const CustomDrawer = props => {
@@ -35,7 +37,7 @@ const CustomDrawer = props => {
   return (
     <View style={{ flex: 1 }}>
       <DrawerContentScrollView {...props}>
-        <View
+        {/* <View
           style={{
             height: 150,
             justifyContent: 'center',
@@ -61,7 +63,7 @@ const CustomDrawer = props => {
             </Text>
             <Text style={{ color: '#D9D9D9' }}>{data.role}</Text>
           </View>
-        </View>
+        </View> */}
         <DrawerItemList {...props} />
       </DrawerContentScrollView>
       <TouchableOpacity
@@ -79,7 +81,7 @@ function MyDrawer({ route }) {
   return (
     <DataContext.Provider value={route.params}>
       <Drawer.Navigator
-        initialRouteName="AddBill"
+        initialRouteName="TaskManagementScreen"
         screenOptions={{
           headerStyle: {
             backgroundColor: 'transparent',
@@ -154,6 +156,8 @@ const App = () => {
         screenOptions={{ headerShown: false }}>
         <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} />
         <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
+        <Stack.Screen name="EmployeeList" component={EmployeeListScreen} />
+        <Stack.Screen name="AddEmployee" component={EmployeeAddScreen} />
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Home" component={MyDrawer} />
 
