@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useCallback} from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,
   Text,
@@ -21,7 +21,7 @@ import * as ImagePicker from 'react-native-image-picker';
 let idItem = '';
 let idItemD = '';
 
-const ServiceManagementScreen = ({navigation}) => {
+const ServiceManagementScreen = ({ navigation }) => {
   const [services, setServices] = useState([]);
   const [detailService, setDetailService] = useState([]);
   const [modalVisibleUpdate, setModalVisibleUpdate] = useState(false);
@@ -56,7 +56,6 @@ const ServiceManagementScreen = ({navigation}) => {
       .then(response => response.json())
       .then(json => setServices(json))
       .catch(error => {
-        console.error(error);
       });
   }, []);
 
@@ -65,7 +64,6 @@ const ServiceManagementScreen = ({navigation}) => {
       .then(response => response.json())
       .then(json => setDetailService(json))
       .catch(error => {
-        console.error(error);
       });
   }, []);
 
@@ -91,6 +89,19 @@ const ServiceManagementScreen = ({navigation}) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(objDetail),
+    }).then(response => {
+      if (response.ok) {
+        detailServiceData();
+      } else {
+      }
+    }).then(() => {
+      setUpdateDataServiceD({
+        title: '',
+        price: '',
+        status: ''
+      })
+      detailServiceData()
+    }).catch(error => {
     })
       .then(response => {
         if (response.ok) {
@@ -149,11 +160,13 @@ const ServiceManagementScreen = ({navigation}) => {
     //call update service
     const url = URL_services + `/${idItemD}`;
     const formData = new FormData();
-    formData.append('image', {
-      uri: hinhAnh.assets[0].uri,
-      type: hinhAnh.assets[0].type,
-      name: hinhAnh.assets[0].fileName,
-    });
+    if (hinhAnh !== null) {
+      formData.append('image', {
+        uri: hinhAnh.assets[0].uri,
+        type: hinhAnh.assets[0].type,
+        name: hinhAnh.assets[0].fileName,
+      });
+    }
     formData.append('serviceName', addDataService.serviceName);
     formData.append('description', addDataService.serviceDescription);
     fetch(url, {
@@ -163,6 +176,14 @@ const ServiceManagementScreen = ({navigation}) => {
         'Content-Type': 'multipart/form-data',
       },
       body: formData,
+    }).then(response => {
+      if (response.ok) {
+        servicesData();
+      } else {
+      }
+    }).catch(error => {
+    }).finally(() => {
+      resetData()
     })
       .then(response => {
         if (response.ok) {
@@ -179,7 +200,6 @@ const ServiceManagementScreen = ({navigation}) => {
 
   // thêm chi tiết
   const serverAddDetail = useCallback(() => {
-    console.log(idItemD + 'idItemD');
     const newDetailAdd = {
       idService: idItemD,
       title: addDataServiceD.title,
@@ -203,18 +223,16 @@ const ServiceManagementScreen = ({navigation}) => {
     });
   });
 
-  const ItemService = ({item}) => {
+  const ItemService = ({ item }) => {
     const [isShowMore, setisShowMore] = useState(false);
     return (
       <View
         style={{
           flex: 1,
-          flexDirection: 'column',
-          margin: 10,
-          marginHorizontal: 40,
+          flexDirection: 'column', marginHorizontal: 10
         }}>
-        <View style={{marginTop: 10}}>
-          <View style={{backgroundColor: 'orange', padding: 8}}>
+        <View style={{ marginTop: 10 }}>
+          <View style={{ backgroundColor: 'orange', padding: 8 }}>
             <Text
               style={{
                 textAlign: 'center',
@@ -227,12 +245,12 @@ const ServiceManagementScreen = ({navigation}) => {
           </View>
           <View>
             <Image
-              source={{uri: item.image}}
-              style={{width: '100%', height: 200}}
+              source={{ uri: item.image }}
+              style={{ width: '100%', height: 200 }}
             />
           </View>
           <View>
-            <Text style={{borderBottomWidth: 1}}>{item.description}</Text>
+            <Text style={{ borderBottomWidth: 1 }}>{item.description}</Text>
           </View>
           <TouchableOpacity
             onPress={() => {
@@ -246,7 +264,7 @@ const ServiceManagementScreen = ({navigation}) => {
               zIndex: 10,
             }}>
             <Image
-              style={{width: 20, height: 20, marginBottom: 3}}
+              style={{ width: 20, height: 20, marginBottom: 3 }}
               source={require('../img/more.png')}
             />
             {isShowMore ? (
@@ -281,7 +299,7 @@ const ServiceManagementScreen = ({navigation}) => {
                     });
                     idItemD = item._id;
                   }}
-                  style={{paddingVertical: 5, paddingHorizontal: 15}}>
+                  style={{ paddingVertical: 5, paddingHorizontal: 15 }}>
                   <Text>Cập nhật</Text>
                 </TouchableOpacity>
               </View>
@@ -289,27 +307,34 @@ const ServiceManagementScreen = ({navigation}) => {
               <></>
             )}
           </TouchableOpacity>
-          <View style={{flexDirection: 'row', borderBottomWidth: 1, zIndex: 0}}>
+          <View style={{ flexDirection: 'row', borderBottomWidth: 1, zIndex: 0 }}>
             <Text
               style={[
-                {flex: 1, fontSize: 15, fontWeight: 'bold', color: 'black'},
+                { flex: 2, fontSize: 15, fontWeight: 'bold', color: 'black' },
                 styles.star,
               ]}>
               Địa điểm
             </Text>
             <Text
               style={[
-                {flex: 1, fontSize: 15, fontWeight: 'bold', color: 'black'},
+                { flex: 2, fontSize: 15, fontWeight: 'bold', color: 'black' },
                 styles.star,
               ]}>
               Giá
             </Text>
             <Text
               style={[
-                {flex: 1, fontSize: 15, fontWeight: 'bold', color: 'black'},
+                { flex: 2, fontSize: 15, fontWeight: 'bold', color: 'black' },
                 styles.star,
               ]}>
               Trạng thái
+            </Text>
+            <Text
+              style={[
+                { flex: 1, fontSize: 15, fontWeight: 'bold', color: 'black' },
+                styles.star,
+              ]}>
+
             </Text>
           </View>
           {detailService &&
@@ -328,16 +353,11 @@ const ServiceManagementScreen = ({navigation}) => {
                     },
                   ]}>
                   <TouchableOpacity
-                    onPress={() => {
-                      setModalVisibleUpdate(true);
-                      idItem = detailItem._id;
-                      setUpdateDataServiceD(detailItem);
-                    }}
-                    style={{flexDirection: 'row'}}>
+                    style={{ flexDirection: 'row' }}>
                     <Text
                       style={[
                         {
-                          flex: 1,
+                          flex: 2,
                           fontSize: 15,
                           fontWeight: 'bold',
                           color: 'black',
@@ -349,7 +369,7 @@ const ServiceManagementScreen = ({navigation}) => {
                     <Text
                       style={[
                         {
-                          flex: 1,
+                          flex: 2,
                           fontSize: 15,
                           fontWeight: 'bold',
                           color: 'black',
@@ -361,7 +381,7 @@ const ServiceManagementScreen = ({navigation}) => {
                     <Text
                       style={[
                         {
-                          flex: 1,
+                          flex: 2,
                           fontSize: 15,
                           fontWeight: 'bold',
                           color: 'black',
@@ -370,6 +390,22 @@ const ServiceManagementScreen = ({navigation}) => {
                       ]}>
                       {detailItem.status}
                     </Text>
+                    <ButtonCustom
+                      onPress={() => {
+                        setModalVisibleUpdate(true);
+                        idItem = detailItem._id;
+                        setUpdateDataServiceD(detailItem);
+                      }}
+                      title="Cập nhật"
+                      style={[
+                        {
+                          flex: 1,
+                          fontSize: 15,
+                          fontWeight: 'bold',
+                          color: 'black',
+                        },
+                        styles.star,
+                      ]} />
                   </TouchableOpacity>
                 </View>
               ))}
@@ -403,7 +439,7 @@ const ServiceManagementScreen = ({navigation}) => {
   return (
     <SafeAreaView>
       <TouchableOpacity
-        style={{position: 'absolute', zIndex: 1, bottom: 10, right: 10}}
+        style={{ position: 'absolute', zIndex: 1, bottom: 10, right: 10 }}
         onPress={() => {
           setModalVisibleAdd(!modalVisibleAdd);
         }}>
@@ -413,7 +449,7 @@ const ServiceManagementScreen = ({navigation}) => {
       <FlatList
         data={services}
         horizontal={false}
-        renderItem={({item}) => <ItemService item={item} />}
+        renderItem={({ item }) => <ItemService item={item} />}
         keyExtractor={item => item._id}
       />
       {/* thêm */}
@@ -424,7 +460,7 @@ const ServiceManagementScreen = ({navigation}) => {
             {hinhAnh ? (
               <View
                 onPress={chonAnh}
-                style={{justifyContent: 'center', alignItems: 'center'}}>
+                style={{ justifyContent: 'center', alignItems: 'center' }}>
                 <View
                   style={{
                     borderRadius: 10,
@@ -432,12 +468,12 @@ const ServiceManagementScreen = ({navigation}) => {
                     justifyContent: 'center',
                   }}>
                   <Image
-                    source={{uri: hinhAnh.assets[0].uri}}
-                    style={{width: 100, height: 100, borderRadius: 10}}
+                    source={{ uri: hinhAnh.assets[0].uri }}
+                    style={{ width: 100, height: 100, borderRadius: 10 }}
                   />
                   <TouchableOpacity
                     onPress={chonAnh}
-                    style={{position: 'absolute', bottom: -10, right: -10}}>
+                    style={{ position: 'absolute', bottom: -10, right: -10 }}>
                     <View
                       style={{
                         backgroundColor: '#ccc',
@@ -446,7 +482,7 @@ const ServiceManagementScreen = ({navigation}) => {
                       }}>
                       <Image
                         source={require('../img/camera.png')}
-                        style={{width: 20, height: 20}}
+                        style={{ width: 20, height: 20 }}
                       />
                     </View>
                   </TouchableOpacity>
@@ -455,7 +491,7 @@ const ServiceManagementScreen = ({navigation}) => {
             ) : (
               <TouchableOpacity
                 onPress={chonAnh}
-                style={{justifyContent: 'center', alignItems: 'center'}}>
+                style={{ justifyContent: 'center', alignItems: 'center' }}>
                 <View
                   style={{
                     backgroundColor: '#ccc',
@@ -466,7 +502,7 @@ const ServiceManagementScreen = ({navigation}) => {
                   }}>
                   <Image
                     source={require('../img/camera.png')}
-                    style={{width: 100, height: 100}}
+                    style={{ width: 100, height: 100 }}
                   />
                 </View>
               </TouchableOpacity>
@@ -490,7 +526,7 @@ const ServiceManagementScreen = ({navigation}) => {
               }
             />
             <ButtonCustom
-              style={{marginTop: 10}}
+              style={{ marginTop: 10 }}
               onPress={() => {
                 ServiceAdd();
                 resetData();
@@ -498,7 +534,7 @@ const ServiceManagementScreen = ({navigation}) => {
               title={'Thêm'}
             />
             <ButtonCustom
-              style={{marginTop: 10}}
+              style={{ marginTop: 10 }}
               onPress={() => {
                 setModalVisibleAdd(false);
                 resetData();
@@ -521,7 +557,7 @@ const ServiceManagementScreen = ({navigation}) => {
             {hinhAnh ? (
               <View
                 onPress={chonAnh}
-                style={{justifyContent: 'center', alignItems: 'center'}}>
+                style={{ justifyContent: 'center', alignItems: 'center' }}>
                 <View
                   style={{
                     borderRadius: 10,
@@ -529,12 +565,12 @@ const ServiceManagementScreen = ({navigation}) => {
                     justifyContent: 'center',
                   }}>
                   <Image
-                    source={{uri: hinhAnh.assets[0].uri}}
-                    style={{width: 100, height: 100, borderRadius: 10}}
+                    source={{ uri: hinhAnh.assets[0].uri }}
+                    style={{ width: 100, height: 100, borderRadius: 10 }}
                   />
                   <TouchableOpacity
                     onPress={chonAnh}
-                    style={{position: 'absolute', bottom: -10, right: -10}}>
+                    style={{ position: 'absolute', bottom: -10, right: -10 }}>
                     <View
                       style={{
                         backgroundColor: '#ccc',
@@ -543,7 +579,7 @@ const ServiceManagementScreen = ({navigation}) => {
                       }}>
                       <Image
                         source={require('../img/camera.png')}
-                        style={{width: 20, height: 20}}
+                        style={{ width: 20, height: 20 }}
                       />
                     </View>
                   </TouchableOpacity>
@@ -552,7 +588,7 @@ const ServiceManagementScreen = ({navigation}) => {
             ) : (
               <TouchableOpacity
                 onPress={chonAnh}
-                style={{justifyContent: 'center', alignItems: 'center'}}>
+                style={{ justifyContent: 'center', alignItems: 'center' }}>
                 <View
                   style={{
                     backgroundColor: '#ccc',
@@ -563,7 +599,7 @@ const ServiceManagementScreen = ({navigation}) => {
                   }}>
                   <Image
                     source={require('../img/camera.png')}
-                    style={{width: 100, height: 100}}
+                    style={{ width: 100, height: 100 }}
                   />
                 </View>
               </TouchableOpacity>
@@ -590,7 +626,7 @@ const ServiceManagementScreen = ({navigation}) => {
               }
             />
             <ButtonCustom
-              style={{marginTop: 10}}
+              style={{ marginTop: 10 }}
               onPress={() => {
                 handleUpdateService();
                 resetData();
@@ -598,7 +634,7 @@ const ServiceManagementScreen = ({navigation}) => {
               title={'Cập nhật'}
             />
             <ButtonCustom
-              style={{marginTop: 10}}
+              style={{ marginTop: 10 }}
               onPress={() => {
                 setmodalUpdateService(false);
                 resetData();
@@ -623,7 +659,7 @@ const ServiceManagementScreen = ({navigation}) => {
               lable="Nhập tên"
               defaultValue={updateDataServiceD.title}
               onChangeText={text =>
-                setUpdateDataServiceD(prevData => ({...prevData, title: text}))
+                setUpdateDataServiceD(prevData => ({ ...prevData, title: text }))
               }
             />
             <TextInputCus
@@ -631,7 +667,7 @@ const ServiceManagementScreen = ({navigation}) => {
               lable="Nhập giá"
               defaultValue={updateDataServiceD.price + ''}
               onChangeText={text =>
-                setUpdateDataServiceD(prevData => ({...prevData, price: text}))
+                setUpdateDataServiceD(prevData => ({ ...prevData, price: text }))
               }
             />
             <TextInputCus
@@ -639,18 +675,18 @@ const ServiceManagementScreen = ({navigation}) => {
               lable="Trạng thái"
               defaultValue={updateDataServiceD.status}
               onChangeText={text =>
-                setUpdateDataServiceD(prevData => ({...prevData, status: text}))
+                setUpdateDataServiceD(prevData => ({ ...prevData, status: text }))
               }
             />
             <ButtonCustom
-              style={{marginTop: 10}}
+              style={{ marginTop: 10 }}
               onPress={() => {
                 handleUpdate();
               }}
               title="Cập nhật"
             />
             <ButtonCustom
-              style={{marginTop: 10}}
+              style={{ marginTop: 10 }}
               onPress={() => {
                 setModalVisibleUpdate(false);
               }}
@@ -669,17 +705,17 @@ const ServiceManagementScreen = ({navigation}) => {
             <TextInputCus
               placeholder="Nhập title"
               onChangeText={text =>
-                setaddDataServiceD(prevData => ({...prevData, title: text}))
+                setaddDataServiceD(prevData => ({ ...prevData, title: text }))
               }
             />
             <TextInputCus
               placeholder="Nhập price"
               onChangeText={text =>
-                setaddDataServiceD(prevData => ({...prevData, price: text}))
+                setaddDataServiceD(prevData => ({ ...prevData, price: text }))
               }
             />
             <ButtonCustom
-              style={{marginTop: 10}}
+              style={{ marginTop: 10 }}
               onPress={() => {
                 serverAddDetail();
                 setModalVisibleAddD(false);
@@ -687,7 +723,7 @@ const ServiceManagementScreen = ({navigation}) => {
               title={'Thêm chi tiết'}
             />
             <ButtonCustom
-              style={{marginTop: 10}}
+              style={{ marginTop: 10 }}
               onPress={() => {
                 setModalVisibleAddD(false);
               }}
