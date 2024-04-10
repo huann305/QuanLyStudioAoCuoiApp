@@ -37,7 +37,7 @@ const CustomDrawer = props => {
   return (
     <View style={{ flex: 1 }}>
       <DrawerContentScrollView {...props}>
-        {/* <View
+        <View
           style={{
             height: 150,
             justifyContent: 'center',
@@ -63,7 +63,7 @@ const CustomDrawer = props => {
             </Text>
             <Text style={{ color: '#D9D9D9' }}>{data.role}</Text>
           </View>
-        </View> */}
+        </View>
         <DrawerItemList {...props} />
       </DrawerContentScrollView>
       <TouchableOpacity
@@ -152,11 +152,7 @@ const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-<<<<<<< HEAD
         initialRouteName="WelcomeScreen"
-=======
-        initialRouteName="ServiceManagementScreen"
->>>>>>> origin/HoangYen
         screenOptions={{ headerShown: false }}>
         <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} />
         <Stack.Screen name="RegisterScreen" component={RegisterScreen} />

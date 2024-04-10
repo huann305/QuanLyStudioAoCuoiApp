@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-import React, { useState, useEffect, useCallback } from 'react';
-=======
-import React, {useState, useMemo, useEffect, useCallback} from 'react';
->>>>>>> origin/HoangYen
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import {
   View,
   Text,
